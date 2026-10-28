@@ -1,0 +1,40 @@
+{
+    "name": "Intelligence",
+    "module": "intelligence",
+    "version": "1.0.0",
+    "description": "The STN-Labz Intel Interface for the persistent data for the Rictus Agent",
+    "update_url": "https://poemei.com/projects/modules/intel/module.json",
+    "creator": "PM",
+    "domain": "poemei.com",
+    "certified": "Yes",
+    "signing": {
+        "algorithm": "rsa-sha256",
+        "fingerprint": "762379FB834CDBE299CD5A817640B4869AD65E22",
+        "sha256": "a2bcd7b52fb39a68d82835cf97ccc001ca1f7b65dcfca0d3de179d15284ce8e6",
+        "key_id": "pm-e3c2ffdafb9920f7",
+        "public_key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQm9qQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FZOEFNSUlCaWdLQ0FZRUFqbi94TTVYRnQwS0tOVVA1REkxbgppRi9UalQ3WnE5cWxvdVQ4VlV4cFpZNnRVZ2QrYkg1dmxzcnkzNm9IcmFCZGpVTDN2VVp1UXJ3cjlTSUNtd2YzCmNHbUh6cWFBcXdMS1ZvcEtqTHFzZ0JUem01SjNqUk1XSFM5VFN2clE3MzQrU0tDcWY1OHh0VU83dS91ZmxrK1UKR1hvclZ3K1NiTVRHczhSdHRtcm0xemlmZHJxODNyTUVybGFFUlBhWnozZUhqMzZWZ2hJMHkwMkJvWW9rZ2dsRgo1VEgvYWs2Ykhwako3alNzdzFoV2J2bnViZDNiSXo2VmI4OVRhbE9XUkZsOEpnaUo5UzNkWTlITnIxVmp3ZGlRCit5RnlnQm9VTzlpYmJ3S1RMOGVaWVlaZDlRbU1mU2ZwdjdadVJVdmhoKy96RkdDYmNZWjlra2RWcE9OajdlMmgKUTVMbDEvM2ZteWxacmxNZ3gwbUk1SUJBd01OWFZoSWtsb3J0SFlrdCtwckFnb1dhQlQ4Q0pRZHJNS3JUN1gwLwpTMUdIMUh2Zzljb0x2U0RoWlkxQXdmTUtrZmxqMDk4UWx0dzhtVGE0U21PQjVSTE04ZzJlN0oycWh5ZnlGdnc1Cno1Z2JWd0d5Y3JQWU5oc2xYWUpxZEZOd09xdmxXR25pQUxPQ2x0eXhZMEV0QWdNQkFBRT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+    },
+    "database_tables": [
+        "intelligence_records",
+        "intelligence_observations",
+        "intelligence_assignments"
+    ],
+    "files": [
+        "controllers/intelligence.php",
+        "models/intelligence_model.php",
+        "views/admin/intelligence.php",
+        "views/index.php",
+        "sql/schema.sql",
+        "sql/patches/.gitkeep",
+        "docs/CHANGELOG.md"
+    ],
+    "routes": [
+        "index",
+        "report",
+        "observation",
+        "assignments",
+        "assignment",
+        "create"
+    ],
+    "index_parameters": true
+}

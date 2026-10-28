@@ -1,0 +1,34 @@
+{
+    "version": "1",
+    "mail": {
+        "from_name": "STN-Labz",
+        "from_email": "support@stn-labz.com"
+    },
+    "topics": [
+        {
+            "value": "general",
+            "label": "General",
+            "enabled": true
+        },
+        {
+            "value": "digit",
+            "label": "Digit",
+            "enabled": true
+        },
+        {
+            "value": "rictus",
+            "label": "Rictus",
+            "enabled": true
+        },
+        {
+            "value": "ezra",
+            "label": "Ezra",
+            "enabled": true
+        },
+        {
+            "value": "abi",
+            "label": "ABI",
+            "enabled": true
+        }
+    ]
+}

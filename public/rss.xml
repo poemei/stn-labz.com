@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/rss.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>STN-Labz</title>
+    <link>https://stn-labz.com</link>
+    <description>Engineering trust is not built on assumptions. At STN-LABZ, systems are designed for predictable behavior, validated through rigorous testing, and trusted only after they consistently demonstrate the required behavior.</description>
+    <lastBuildDate>Wed, 28 Oct 2026 08:43:56 +0000</lastBuildDate>
+    <generator>Chaos MVC</generator>
+    <atom:link href="https://stn-labz.com/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Digit LM Update</title>
+      <link>https://stn-labz.com/posts/digit-lm-update</link>
+      <guid isPermaLink="true">https://stn-labz.com/posts/digit-lm-update</guid>
+      <description>## Digit/Rictus/Ezra SAI/AI Agent Language Model Development
+
+We opted to use **Ollama** to export our custom data into a sensible Q&amp;A JSONL for inclusion into our own Model in **GGUF** format.
+
+*Automated Irritation* is a song created by our founder,in repsonse to a particular well known AI Platform that makes it a habit of either failing completely or breaking things it should not have touched and a blatent disregard to STN-Labz Policies.
+---
+
+**Digit** &amp; **Rictus** are Terrestrial Agents while **Ezra** is Space focused.
+
+Reports will use the {color:red}R{/color}{color:amber}A{/color}{color:green}G{/color} Color Scheme for things {color:red}Failing{/color}, {color:amber}Unmet{/color} and {color:green}Pass{/color}
+---
+
+**Update 20261026:0459Z**
+Each Agent Identified as themselves: {color:green}Pass{/color}
+
+**Update 20261027:2130Z**
+All agents are now protected by the **Sentinel-Daemon**
+Sentinel Damon Config test: {color:green}Pass{/color}
+
+We will continue to develop and monitor
+
+*Competency is the Watchword of the Day*
+**Competency is demonstrated. Root causes are corrected.**
+**AUTOMATED IRRITATION: STILL OPERATIONAL**
+---
+
+*~ Team Digit*</description>
+      <pubDate>Sat, 24 Oct 2026 18:38:22 +0000</pubDate>
+    </item>
+    <item>
+      <title>Digit Publisher - Core Posts Integration Verification</title>
+      <link>https://stn-labz.com/posts/digit-publisher---core-posts-integration-verification</link>
+      <guid isPermaLink="true">https://stn-labz.com/posts/digit-publisher---core-posts-integration-verification</guid>
+      <description>STN-LABZ is validating publication through the existing ChAoS MVC **Core Posts** interface.
+
+Digit is exercising authenticated submission, site-specific Media selection, publication state, public presentation, and session termination.
+
+This verification does not represent autonomous editorial operation or a production announcement.
+
+Technical verification marker: STNLABZ-DIGIT-CORE-POSTS-20261022</description>
+      <pubDate>Thu, 22 Oct 2026 21:45:18 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,35 @@
+{
+    "name": "Sentinel",
+    "module": "sentinel",
+    "version": "1.9.1",
+    "update_url": "https://stn-labz.com/updates/sentinel.json",
+    "description": "Sentinel security module for ChAoS MVC with STN-LABZ API intelligence synchronization, local threat detection, IP blocking, and administrative oversight.",
+    "creator": "PM",
+    "domain": "poemei.com",
+    "certified": "Yes",
+    "database_tables": [
+        "sentinel",
+        "sentinel_config",
+        "sentinel_schema"
+    ],
+    "routes": [
+        "index"
+    ],
+    "files": [
+        "controllers/sentinel.php",
+        "models/sentinel_model.php",
+        "lib/sentinel_perimeter.php",
+        "plugins/sentinel_plugins.php",
+        "plugins/httpbl/httpbl.php",
+        "views/admin/index.php",
+        "sql/schema.sql",
+        "sql/patches/legacy-to-1.9.0.sql",
+        "docs/CHANGELOG.md",
+        "README.md",
+        "views/index.php"
+    ],
+    "schema_version": "1.9.0",
+    "migrations": {
+        "legacy-to-1.9.0": "sql/patches/legacy-to-1.9.0.sql"
+    }
+}

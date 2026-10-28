@@ -1,0 +1,32 @@
+{
+    "name": "Security",
+    "module": "security",
+    "version": "1.1.0",
+    "description": "Public cryptographic identity and observable site security capabilities",
+    "update_url": "https://poemei.com/projects/modules/security/security.json",
+    "creator": "PM",
+    "domain": "poemei.com",
+    "certified": "No",
+    "signing": {
+	    "type": "openpgp",
+        "fingerprint": "762379FB834CDBE299CD5A817640B4869AD65E22",
+        "sha256": "",
+        "key_id": "pm-e3c2ffdafb9920f7",
+        "public_key": "mDMEaphcuRYJKwYBBAHaRw8BAQdA10/VGc5Yo54m4oDqJie5PR1Ytkxh+8nnyaKo/PKGck+0GFBvZSBNZWkgPHBvZUBwb2VtZWkuY29tPoi1BBMWCgBdFiEEdiN5+4NM2+KZzVqBdkC0hprWXiIFAmqYXLkbFIAAAAAABAAObWFudTIsMi41KzEuMTIsMiwxAhsDBQkFpQF3BQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEHZAtIaa1l4iHT0A/0k6TTCLKbYzsjeNi29eZY9/NmAHV5Z3icSy8eaLmyOGAQC1NvfYAZuKx3KtaVVCfxBHuSCdKv9qxdZ5ih+1CnQDLg4BGqYXLkSCisGAQQBl1UBBQEBB0Ch+qYmWHOCkhHt4++/sNpAsjS8csyfMARJq6cgkV2AIwMBCAeImgQYFgoAQhYhBHYjefuDTNvimc1agXZAtIaa1l4iBQJqmFy5GxSAAAAAAAQADm1hbnUyLDIuNSsxLjEyLDIsMQIbDAUJBaUBdwAKCRB2QLSGmtZeIkeeAP96s+mbRx56eOqXN33aEMPrqSbop0oWxh8YncIOPOL6PAD9Gf4nPQ2A6MGafi88fRh0k9CJEBDk+Pt7CszG1H5vYQM==iviF"
+    },
+    "database_tables": [
+        "security_settings"
+    ],
+    "files": [
+        "controllers/security.php",
+        "models/security_model.php",
+        "views/admin/security.php",
+        "views/index.php",
+        "sql/schema.sql",
+        "docs/CHANGELOG.md",
+        "README.md"
+    ],
+    "routes": [
+        "index"
+    ]
+}

@@ -1,0 +1,198 @@
+{
+    "$schema": "https://schema.stn-labz.com/site/v1/schema.json",
+    "version": "1.0",
+    "site": {
+        "url": "https://www.stn-labz.com",
+        "name": "STN-Labz",
+        "description": "Engineering trust is not built on assumptions. At STN-LABZ, systems are designed for predictable behavior, validated through rigorous testing, and trusted only after they consistently demonstrate the required behavior.",
+        "language": "en"
+    },
+    "resources": [
+        {
+            "url": "https://www.stn-labz.com/announcements",
+            "type": "other",
+            "title": "Announcements",
+            "description": "The Public announcements module for the ChAoS MVC",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/certification",
+            "type": "other",
+            "title": "Certification",
+            "description": "Chaos certification information",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/company",
+            "type": "other",
+            "title": "Company",
+            "description": "JSON-backed company content management for Careers and Acknowledgments.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/contact",
+            "type": "other",
+            "title": "Contact",
+            "description": "A website contact utility module that uses the Chaos MVC built-in mailer to capture and manage contacts from the domain.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/digit",
+            "type": "page",
+            "title": "Digit",
+            "description": "Digit is an evolving, modular AI agent developed within the STN-Labz ecosystem.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/digit-pages-stnlabz-verification",
+            "type": "page",
+            "title": "Digit Core Pages - STN-LABZ Verification",
+            "description": "Digit Core Pages acceptance",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/home",
+            "type": "other",
+            "title": "Home",
+            "description": "STN-LABZ home page",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/intelligence",
+            "type": "other",
+            "title": "Intelligence",
+            "description": "The STN-Labz Intel Interface for the persistent data for the Rictus Agent",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/letters",
+            "type": "other",
+            "title": "letters",
+            "description": "A standalone opt-in newsletter and distribution module for Chaos MVC.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/market",
+            "type": "other",
+            "title": "Market",
+            "description": "STN-LABZ marketplace",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/mission-status",
+            "type": "page",
+            "title": "Mission Status",
+            "description": "The STN-Labz Mission Updates",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/news",
+            "type": "other",
+            "title": "News",
+            "description": "Official ChAoS MVC news, development announcements, releases, and security advisories.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/posts",
+            "type": "page",
+            "title": "Posts",
+            "description": "Posts",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/posts/digit-lm-update",
+            "type": "article",
+            "title": "Digit LM Update",
+            "description": "## Digit/Rictus/Ezra SAI/AI Agent Language Model Development We opted to use **Ollama** to export our custom data into a sensible Q&A JSONL for inclusion into our own Model in **GGUF** format. *Automated Irritation* is a song created by our founder,in repsonse to a particular well known AI Platform that makes it a habit of either failing completely or breaking things it should not have touched and a blatent disregard to STN-Labz Policies. --- **Digit** & **Rictus** are Terrestrial Agents while **Ezra** is Space focused. Reports will use the {color:red}R{/color}{color:amber}A{/color}{color:green}G{/color} Color Scheme for things {color:red}Failing{/color}, {color:amber}Unmet{/color} and {color:green}Pass{/color} --- **Update 20261026:0459Z** Each Agent Identified as themselves: {color:green}Pass{/color} **Update 20261027:2130Z** All agents are now protected by the **Sentinel-Daemon** Sentinel Damon Config test: {color:green}Pass{/color} We will continue to develop and monitor *Competency is the Watchword of the Day* **Competency is demonstrated. Root causes are corrected.** **AUTOMATED IRRITATION: STILL OPERATIONAL** --- *~ Team Digit*",
+            "language": "en",
+            "index": true,
+            "published": "2026-10-24"
+        },
+        {
+            "url": "https://www.stn-labz.com/posts/digit-publisher---core-posts-integration-verification",
+            "type": "article",
+            "title": "Digit Publisher - Core Posts Integration Verification",
+            "description": "STN-LABZ is validating publication through the existing ChAoS MVC **Core Posts** interface. Digit is exercising authenticated submission, site-specific Media selection, publication state, public presentation, and session termination. This verification does not represent autonomous editorial operation or a production announcement. Technical verification marker: STNLABZ-DIGIT-CORE-POSTS-20261022",
+            "language": "en",
+            "index": true,
+            "published": "2026-10-22"
+        },
+        {
+            "url": "https://www.stn-labz.com/products",
+            "type": "other",
+            "title": "Products",
+            "description": "STN-LABZ product catalog",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/rictus",
+            "type": "page",
+            "title": "Rictus",
+            "description": "Rictus operates continuously within defined authority while preserving human control over decisions that require organizational action.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/rss.xml",
+            "type": "feed",
+            "title": "STN-Labz RSS",
+            "description": "STN-Labz RSS",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/sai-dsa",
+            "type": "page",
+            "title": "sai-dsa",
+            "description": "Status: {color:red}MEDIUM / HIGH / CRITICAL{/color} — Under Investigation [S2] API severity MEDIUM/HIGH/CRITICAL under investigation; Rictus indicator match=not found (not proof of compromise). System Availability - Rictus: accessible - Sentinel: accessible - Case Register: 562 source-record cases - Latest Poll: 0 source records opened or changed.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/security",
+            "type": "other",
+            "title": "Security",
+            "description": "Public cryptographic identity and observable site security capabilities",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/sentinel",
+            "type": "other",
+            "title": "Sentinel",
+            "description": "Sentinel security module for ChAoS MVC with STN-LABZ API intelligence synchronization, local threat detection, IP blocking, and administrative oversight.",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/srt",
+            "type": "other",
+            "title": "Srt",
+            "description": "Security Research Targets",
+            "language": "en",
+            "index": true
+        },
+        {
+            "url": "https://www.stn-labz.com/support",
+            "type": "other",
+            "title": "Support Module",
+            "description": "Support ticket management with public submission, ticket tracking, administrative replies, tier assignment, and escalation.",
+            "language": "en",
+            "index": true
+        }
+    ]
+}

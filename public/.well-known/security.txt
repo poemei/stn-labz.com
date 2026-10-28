@@ -1,0 +1,8 @@
+Contact: mailto:security@stn-labz.com (This is a forwarded address, reply will come from a PGP signed address)
+Engineering: engineering@stn-labz.com (This is a forwarded address, reply will come from a PGP signed address)
+Encryption: https://stn-labz.org/security
+Acknowledgments: https://stn-labz.com/company/page/acknowledgments
+Preferred-Languages: en
+Canonical: https://stn-labz.com/.well-known/security.txt
+Policy: https://stn-labz.com/security
+Hiring: https://stn-labz.com/company/page/careers

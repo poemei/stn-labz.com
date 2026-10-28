@@ -1,0 +1,10 @@
+{
+  "module": "home",
+  "name": "Home",
+  "version": "1.0.6",
+  "author": "STN-LABZ",
+  "description": "STN-LABZ home page",
+  "routes": [
+    "index"
+  ]
+}

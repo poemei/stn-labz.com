@@ -1,0 +1,14 @@
+{
+  "module": "certification",
+  "name": "Certification",
+  "version": "1.0.0",
+  "author": "STN-LABZ",
+  "description": "Chaos certification information",
+  "routes": [
+    "index",
+    "positions",
+    "certifications",
+    "missions",
+    "domains"
+  ]
+}

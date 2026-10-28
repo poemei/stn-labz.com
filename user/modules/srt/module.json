@@ -1,0 +1,12 @@
+{
+  "module": "srt",
+  "name": "Srt",
+  "version": "1.0.0",
+  "author": "STN-LABZ",
+  "description": "Security Research Targets",
+  "routes": [
+    "index",
+    "detail",
+    "create"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+    "version": "1.0.6",
+    "generated_at": "2026-10-20T23:17:26+00:00",
+    "stats": {
+        "total_threats": 747,
+        "by_type": {
+            "pattern_match": 548,
+            "malware": 6,
+            "wp_admin_scan": 176,
+            "wp_scan": 2,
+            "bot_probe": 15
+        }
+    },
+    "analysis": {
+        "total_24h": 0,
+        "trending": [],
+        "active_sites": []
+    },
+    "patterns": [
+        "wp-admin",
+        "xmlrpc",
+        ".env",
+        "eval(",
+        "config.php",
+        "cgi-bin",
+        "phpinfo"
+    ],
+    "blocklists": {
+        "ips": [
+            "108.178.43.142",
+            "172.56.105.234"
+        ]
+    }
+}

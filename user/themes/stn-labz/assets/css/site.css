@@ -1,0 +1,627 @@
+/* ==========================================================================
+   STN-Labz Dark Metallic Base
+   ========================================================================== */
+:root {
+  --bg: #0f1418;
+  --panel: #12181d;
+  --panel-light: #1a2026;
+  --ink: #e7eaee;
+  --muted: #a7afb8;
+  --teal: #16c7c2;
+  --metal1: #9b9fa6;
+  --metal2: #5b616a;
+  --line: rgba(255,255,255,.12);
+  --glow: 0 0 12px rgba(22, 199, 194, 0.25);
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Global / Typography
+   ========================================================================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.25px;
+  margin-top: 0;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+h1 {
+  font-size: 2.2rem;
+  background: linear-gradient(90deg, var(--metal1), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--glow);
+}
+
+h2 {
+  font-size: 1.6rem;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.25rem;
+}
+
+p {
+  color: var(--muted);
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+  max-width: 75ch;
+}
+
+strong { color: var(--teal); font-weight: 600; }
+
+/* Links */
+a {
+  color: var(--teal);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+a:hover {
+  color: #19e2dc;
+  text-decoration: underline;
+}
+
+a:visited { 
+  color: var(--teal);
+}
+
+/* ==========================================================================
+   Layout / Containers / Sections
+   ========================================================================== */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem auto 3rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ==========================================================================
+   Header (brand / nav)
+   ========================================================================== */
+.brand { display:flex; align-items:center; gap:12px; }
+.brand img { height:34px; width:auto; object-fit:contain; }
+.brand span { font-weight:800; letter-spacing:.2px; }
+
+
+/* ===============================================
+   NAVIGATION LINKS — STN-Labz Metallic Teal Theme
+   =============================================== */
+.nav-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.nav-links a {
+  color: var(--teal, #16c7c2);
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.25s ease;
+  padding-bottom: 4px;
+  padding-right: 3px;
+}
+
+/* Hover: faint metallic sheen */
+.nav-links a:hover {
+  opacity: 0.9;
+}
+
+/* Active (current page): bold + metallic underline */
+.nav-links a.active {
+  font-weight: 700;
+}
+
+/* Custom metallic underline for active link */
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--metal1, #9b9fa6),
+    var(--teal, #16c7c2),
+    #19e2dc
+  );
+  box-shadow: 0 0 6px rgba(22, 199, 194, 0.4);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr; /* logo | text */
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 0;
+  margin-top: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+.hero-logo {
+  width: 140px; height: auto; object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+  border-radius: 12px;
+  /* new padding to keep image off left edge */
+  margin-left: 1.5rem;      /* buffer from container edge */
+}
+.hero-title {
+  font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--metal1), var(--teal));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: var(--glow);
+}
+.hero-tag { font-size: 1.1rem; font-weight: 500; color: var(--muted); margin-bottom: 1rem; }
+.hero-lead { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; max-width: 70ch; }
+
+/* ==========================================================================
+   Cards / Grids / Progress
+   ========================================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: var(--ink);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+.card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.35), 0 0 8px rgba(22,199,194,0.25); transform: translateY(-2px); }
+
+.card h3 { font-size: 1.3rem; margin: 0 0 .5rem; color: var(--teal); font-weight: 600; }
+.card h3 a { color: var(--teal); text-decoration: none; }
+.card h3 a:hover { color: #19e2dc; text-decoration: underline; }
+.card p { color: var(--muted); margin: 0 0 .8rem; font-size: .95rem; line-height: 1.5; }
+
+.progress {
+  background: var(--panel-light);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  height: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+.progress span {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--teal), #19e2dc);
+  box-shadow: 0 0 8px rgba(22,199,194,0.4);
+  transition: width .5s ease;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  background: var(--panel-light);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  transition: all 0.25s ease;
+}
+.btn.primary { background: linear-gradient(135deg, var(--metal1), var(--metal2)); color: #0c0f11; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.4), var(--glow); }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+/* === Global Footer === */
+.foot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  background: linear-gradient(180deg, var(--panel) 0%, #0c1014 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  text-align: center;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.footer-left {
+  margin-left: 10px;
+  }
+  
+  .footer-right {
+    margin-right: 10px;
+}
+
+.footer-left,
+.footer-right,
+.footer-center {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+.footer-left small,
+.footer-center small,
+.footer-right small {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--muted, #a7afb8);
+}
+
+.footer-center a {
+  color: var(--teal, #16c7c2);
+  text-decoration: none;
+}
+
+.footer-center a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .footer-left,
+  .footer-right,
+  .footer-center {
+    flex: 1;
+  }
+
+  .footer-left { text-align: left; }
+  .footer-center { text-align: center; }
+  .footer-right { text-align: right; }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.section-title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.25rem;
+  color: var(--ink);
+  text-shadow: 0 0 6px rgba(22,199,194,0.2);
+}
+.muted { color: var(--muted); font-style: italic; text-align: center; padding: 1rem; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 768px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+  section { padding: 1.5rem; margin: 1.2rem; }
+  .hero-wrap { grid-template-columns: 1fr; text-align: center; }
+  .hero-logo { margin: 0 auto 1rem; width: 100px; }
+}
+
+@media (max-width: 640px) {
+  .foot-row { flex-direction: column; text-align: center; }
+}
+
+@media (min-width: 992px) {
+  .hero-logo {
+    margin-left: 2.5rem;
+  }
+}
+
+/* ===== Breadcrumbs — STN-Labz style ===== */
+.breadcrumbs {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: left;                   /* always left-aligned */
+  color: var(--muted, #a7afb8);
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;        /* left alignment */
+  gap: 0.25rem;
+}
+
+.breadcrumbs li {
+  display: inline;
+}
+
+.breadcrumbs li::after {
+  content: "|";
+  color: var(--metal1, #9b9fa6);
+  margin: 0 0.4rem;
+  opacity: 0.6;
+}
+
+.breadcrumbs li:last-child::after {
+  content: none;
+}
+
+.breadcrumbs a {
+  color: var(--teal, #16c7c2);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs li.active span {
+  color: var(--ink, #e7eaee);
+  font-weight: 600;
+  font-style: normal;
+}
+
+.product-card,
+.product-detail {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.product-image img {
+    max-width: 180px;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* =========================================================
+   STN-Labz Sentinel Intel Widget (Public-Safe)
+   ========================================================= */
+
+.stn-widget {
+    border: 1px solid rgba(20, 211, 198, 0.25);
+    border-radius: 14px;
+    padding: 18px;
+    background: linear-gradient(
+        180deg,
+        rgba(6, 14, 22, 0.96),
+        rgba(10, 24, 38, 0.96)
+    );
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    color: #e6f2f3;
+}
+
+.stn-widget-header {
+    margin-bottom: 16px;
+}
+
+.stn-widget-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    color: #14d3c6;
+}
+
+.stn-widget-subtitle {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #d7f5f2;
+}
+
+.stn-widget-note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #9bbec3;
+}
+
+.stn-widget-meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #8aa8ad;
+}
+
+/* ---------------------------------------------------------
+   Grid
+   --------------------------------------------------------- */
+
+.stn-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 12px;
+}
+
+/* ---------------------------------------------------------
+   Cards
+   --------------------------------------------------------- */
+
+.stn-card {
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 12px;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.stn-card h3 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #9dded8;
+}
+
+.stn-value {
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1;
+    color: #14d3c6;
+}
+
+.stn-value.stn-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e6f2f3;
+}
+
+.stn-help {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #9bbec3;
+    line-height: 1.35;
+}
+
+/* ---------------------------------------------------------
+   Column spans
+   --------------------------------------------------------- */
+
+.stn-span-4 {
+    grid-column: span 4;
+}
+
+.stn-span-6 {
+    grid-column: span 6;
+}
+
+.stn-span-12 {
+    grid-column: span 12;
+}
+
+/* ---------------------------------------------------------
+   Lists
+   --------------------------------------------------------- */
+
+.stn-list {
+    margin-top: 10px;
+    padding-left: 18px;
+}
+
+.stn-list li {
+    margin: 6px 0;
+    font-size: 13px;
+    color: #e6f2f3;
+}
+
+/* ---------------------------------------------------------
+   Key / Value layout
+   --------------------------------------------------------- */
+
+.stn-kv {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.stn-kv .k {
+    color: #9bbec3;
+}
+
+.stn-kv .v {
+    font-weight: 900;
+    color: #14d3c6;
+}
+
+/* ---------------------------------------------------------
+   Footer
+   --------------------------------------------------------- */
+
+.stn-widget-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.stn-widget-disclaimer {
+    font-size: 12px;
+    color: #8aa8ad;
+}
+
+.stn-footer-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.stn-footer-rss-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.stn-footer-ror-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.stn-footer-sitemap-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.stn-footer-announcements-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .stn-span-4,
+    .stn-span-6 {
+        grid-column: span 12;
+    }
+}
+

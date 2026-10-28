@@ -1,0 +1,132 @@
+<rss xmlns:ror="http://rorweb.com/0.1/" version="2.0">
+  <channel>
+    <title>STN-Labz Resources</title>
+    <link>https://www.stn-labz.com</link>
+    <description>Engineering trust is not built on assumptions. At STN-LABZ, systems are designed for predictable behavior, validated through rigorous testing, and trusted only after they consistently demonstrate the required behavior.</description>
+    <docs>https://www.stn-labz.com/ror.xml</docs>
+    <item>
+      <title>Announcements</title>
+      <link>https://www.stn-labz.com/announcements</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/announcements</guid>
+      <description>The Public announcements module for the ChAoS MVC</description>
+    </item>
+    <item>
+      <title>Certification</title>
+      <link>https://www.stn-labz.com/certification</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/certification</guid>
+      <description>Chaos certification information</description>
+    </item>
+    <item>
+      <title>Company</title>
+      <link>https://www.stn-labz.com/company</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/company</guid>
+      <description>JSON-backed company content management for Careers and Acknowledgments.</description>
+    </item>
+    <item>
+      <title>Contact</title>
+      <link>https://www.stn-labz.com/contact</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/contact</guid>
+      <description>A website contact utility module that uses the Chaos MVC built-in mailer to capture and manage contacts from the domain.</description>
+    </item>
+    <item>
+      <title>Digit</title>
+      <link>https://www.stn-labz.com/digit</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/digit</guid>
+      <description>Digit is an evolving, modular AI agent developed within the STN-Labz ecosystem.</description>
+    </item>
+    <item>
+      <title>Digit Core Pages - STN-LABZ Verification</title>
+      <link>https://www.stn-labz.com/digit-pages-stnlabz-verification</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/digit-pages-stnlabz-verification</guid>
+      <description>Digit Core Pages acceptance</description>
+    </item>
+    <item>
+      <title>Home</title>
+      <link>https://www.stn-labz.com/home</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/home</guid>
+      <description>STN-LABZ home page</description>
+    </item>
+    <item>
+      <title>Intelligence</title>
+      <link>https://www.stn-labz.com/intelligence</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/intelligence</guid>
+      <description>The STN-Labz Intel Interface for the persistent data for the Rictus Agent</description>
+    </item>
+    <item>
+      <title>letters</title>
+      <link>https://www.stn-labz.com/letters</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/letters</guid>
+      <description>A standalone opt-in newsletter and distribution module for Chaos MVC.</description>
+    </item>
+    <item>
+      <title>Market</title>
+      <link>https://www.stn-labz.com/market</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/market</guid>
+      <description>STN-LABZ marketplace</description>
+    </item>
+    <item>
+      <title>Mission Status</title>
+      <link>https://www.stn-labz.com/mission-status</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/mission-status</guid>
+      <description>The STN-Labz Mission Updates</description>
+    </item>
+    <item>
+      <title>News</title>
+      <link>https://www.stn-labz.com/news</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/news</guid>
+      <description>Official ChAoS MVC news, development announcements, releases, and security advisories.</description>
+    </item>
+    <item>
+      <title>Posts</title>
+      <link>https://www.stn-labz.com/posts</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/posts</guid>
+    </item>
+    <item>
+      <title>Products</title>
+      <link>https://www.stn-labz.com/products</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/products</guid>
+      <description>STN-LABZ product catalog</description>
+    </item>
+    <item>
+      <title>Rictus</title>
+      <link>https://www.stn-labz.com/rictus</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/rictus</guid>
+      <description>Rictus operates continuously within defined authority while preserving human control over decisions that require organizational action.</description>
+    </item>
+    <item>
+      <title>sai-dsa</title>
+      <link>https://www.stn-labz.com/sai-dsa</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/sai-dsa</guid>
+      <description>Status: {color:red}MEDIUM / HIGH / CRITICAL{/color} — Under Investigation [S2] API severity MEDIUM/HIGH/CRITICAL under investigation; Rictus indicator match=not found (not proof of compromise). System Availability - Rictus: accessible - Sentinel: accessible - Case Register: 562 source-record cases - Latest Poll: 0 source records opened or changed.</description>
+    </item>
+    <item>
+      <title>Security</title>
+      <link>https://www.stn-labz.com/security</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/security</guid>
+      <description>Public cryptographic identity and observable site security capabilities</description>
+    </item>
+    <item>
+      <title>Sentinel</title>
+      <link>https://www.stn-labz.com/sentinel</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/sentinel</guid>
+      <description>Sentinel security module for ChAoS MVC with STN-LABZ API intelligence synchronization, local threat detection, IP blocking, and administrative oversight.</description>
+    </item>
+    <item>
+      <title>Site Json</title>
+      <link>https://www.stn-labz.com/site_json</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/site_json</guid>
+    </item>
+    <item>
+      <title>Srt</title>
+      <link>https://www.stn-labz.com/srt</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/srt</guid>
+      <description>Security Research Targets</description>
+    </item>
+    <item>
+      <title>Support Module</title>
+      <link>https://www.stn-labz.com/support</link>
+      <guid isPermaLink="true">https://www.stn-labz.com/support</guid>
+      <description>Support ticket management with public submission, ticket tracking, administrative replies, tier assignment, and escalation.</description>
+    </item>
+  </channel>
+</rss>

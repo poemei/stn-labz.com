@@ -1,0 +1,45 @@
+{
+    "name": "letters",
+    "module": "letters",
+    "version": "1.1.1",
+    "description": "A standalone opt-in newsletter and distribution module for Chaos MVC.",
+    "update_url": "https://poemei.com/updates/letters.json",
+    "creator": "PM",
+    "domain": "www.poemei.com",
+    "certified": "Yes",
+    "signing": {
+        "algorithm": "RSA-SHA256",
+        "sha256": "4bd1f04ca2a7fc78865ea21bf2b412c3a435513bfae80a493a68b33dc67ed735",
+        "key_id": "pm-aab3866b2f02eab5",
+        "public_key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQm9qQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FZOEFNSUlCaWdLQ0FZRUF0NkRBMmdQbXJ3U1dNVVIvRkhMbQphN2tDVTJiMzBXNzVUb2R0Z1JvUjhkN3ZPb2hPQWlYZjJ6MXYvRjJROU1QOWgvREVjUkpZMHpYNnNsdEtoeW9XCnJpNDhqelFTTnJVUmdpOWd2ZlliQXpzdnZxb3Vkb2ViQlpqdU92UGNkRDRGclpMS0FqaTRzWmNWQ0Z6a1htdHIKWEx0WGJEK0hqY0tZVE9USUdUa3k2VU5Hb2ptTldMTTZGSS9vTHI3amxMalpwRjB6QSsrZ2JkdU9rL3hnK082bgpkbFNlZzVHaUtuV25KbG8vREFBWHBVYUNqMkxKTWh1d2JobUpZN0JmNEFYTTUzdlNKZTQ3VFdUb3ZlY1NSOUFPCjJpVVJZcEtheFM2dkQxZjg5S2ZnckkzSWZZcEJEYzM3UExkVTRLdUhwZEFZM1hMYytLRXpNSWl5SG5yUnpmOXIKcDNHKzNlNjV1YXA1dnVPcm96ZVV1RUMvdXFFTU9hK3VBT1R1VjRFbDkrM0I0ZFZtOXRRT2JOWmlVbzBmTlllegoxU0NPa0xhWTBLbEpkVzJNNUVsSVFScldpTkh2NlgwZUFuSnR6RFVGVE9RdnB5dzViUXhrWXhoVDhPU1ZXTjNCCnVnTHY1Z3VFWnk3bFV6RUtoMUx3K2VrcGQ1T1hrWmhiSTdwbjR1aEIwbXNCQWdNQkFBRT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+    },
+    "database_tables": [
+        "letters",
+        "letters_subscribers"
+    ],
+    "migrations": {
+        "1.0.0-to-1.1.0": "sql/patches/1.0.0-to-1.1.0.sql",
+        "1.0.1-to-1.1.0": "sql/patches/1.0.1-to-1.1.0.sql",
+        "1.0.0-to-1.1.1": "sql/patches/1.0.0-to-1.1.1.sql",
+        "1.0.1-to-1.1.1": "sql/patches/1.0.1-to-1.1.1.sql"
+    },
+    "routes": [
+        "index",
+        "unsubscribe"
+    ],
+    "files": [
+        "controllers/letters.php",
+        "models/letters_model.php",
+        "views/index.php",
+        "views/unsubscribe.php",
+        "views/admin/index.php",
+        "views/admin/letters.php",
+        "sql/schema.sql",
+        "sql/patches/1.0.0-to-1.1.0.sql",
+        "sql/patches/1.0.1-to-1.1.0.sql",
+        "sql/patches/1.0.0-to-1.1.1.sql",
+        "sql/patches/1.0.1-to-1.1.1.sql",
+        "README.md",
+        "docs/CHANGELOG.md"
+    ]
+}

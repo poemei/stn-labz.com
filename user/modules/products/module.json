@@ -1,0 +1,15 @@
+{
+  "module": "products",
+  "name": "Products",
+  "version": "1.0.0",
+  "author": "STN-LABZ",
+  "description": "STN-LABZ product catalog",
+  "routes": [
+    "index",
+    "space",
+    "sentinel",
+    "dct_win",
+    "module_builder",
+	"digit"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+    "module": "company",
+    "name": "Company",
+    "version": "1.2.0",
+    "author": "STN-LABZ",
+    "description": "JSON-backed company content management for Careers and Acknowledgments.",
+    "routes": [
+        "index",
+        "page"
+    ],
+    "files": [
+        "README.md",
+        "controllers/company.php",
+        "data/company.json",
+        "docs/CHANGELOG.md",
+        "models/company_model.php",
+        "views/document.php",
+        "views/admin/company.php"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "host": "mail.stn-labz.com",
+    "smtp_auth": true,
+    "username": "mailer@stn-labz.com",
+    "password": "H6a91c62a!",
+    "encryption": "starttls",
+    "port": 587,
+    "from_email": "no-reply@stn-labz.com",
+    "from_name": "STN-Labz"
+}

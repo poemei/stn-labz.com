@@ -1,0 +1,7 @@
+# STN-Labz Policies
+contact: mailto:security@stn-labz.com
+encryption: https://stn-labz.com.com/pgp_key
+canonical: https://stn-labz.com/.well-known/security.txt
+policy: https://stn-labz.com/security
+hiring: https://stn-labz.com/jobs
+expires: 2030-01-01t00:00:00.000z

@@ -1,0 +1,12 @@
+{
+    "module": "contact",
+    "version": "1.1.0",
+    "download": "https://www.poemei.com/packages/contact-1.1.0.zip",
+    "sha256": "53c8cafd60ceefa4dbf48615dc9063d4690651bc181faad1edf4f4d7f6b826ae",
+    "key_id": "pm-aab3866b2f02eab5",
+    "signature": "MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAt6DA2gPmrwSWMUR/FHLma7kCU2b30W75TodtgRoR8d7vOohOAiXf2z1v/F2Q9MP9h/DEcRJY0zX6sltKhyoWri48jzQSNrURgi9gvfYbAzsvvqoudoebBZjuOvPcdD4FrZLKAji4sZcVCFzkXmtrXLtXbD+HjcKYTOTIGTky6UNGojmNWLM6FI/oLr7jlLjZpF0zA++gbduOk/xg+O6ndlSeg5GiKnWnJlo/DAAXpUaCj2LJMhuwbhmJY7Bf4AXM53vSJe47TWTovecSR9AO2iURYpKaxS6vD1f89KfgrI3IfYpBDc37PLdU4KuHpdAY3XLc+KEzMIiyHnrRzf9rp3G+3e65uap5vuOrozeUuEC/uqEMOa+uAOTuV4El9+3B4dVm9tQObNZiUo0fNYez1SCOkLaY0KlJdW2M5ElIQRrWiNHv6X0eAnJtzDUFTOQvpyw5bQxkYxhT8OSVWN3BugLv5guEZy7lUzEKh1Lw+ekpd5OXkZhbI7pn4uhB0msBAgMBAAE=",
+    "description": "A Lightweight Contact Addon Module for MVC platforms. Commercial module.",
+    "creator": "P. Mei",
+    "domain": "www.poemei.com",
+    "certified": "Yes"
+}

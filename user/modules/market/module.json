@@ -1,0 +1,21 @@
+{
+  "module": "market",
+  "name": "Market",
+  "version": "1.0.0",
+  "author": "STN-LABZ",
+  "description": "STN-LABZ marketplace",
+  "routes": [
+    "index",
+    "save_config",
+    "add_category",
+    "delete_category",
+    "add_product",
+    "edit_product",
+    "delete_product",
+    "detail",
+    "success",
+    "download",
+    "intent",
+    "webhook"
+  ]
+}

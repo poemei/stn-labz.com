@@ -1,0 +1,29 @@
+
+{
+    "name": "News",
+    "module": "news",
+    "version": "1.0.0",
+    "schema_version": "1.0.0",
+    "description": "Official ChAoS MVC news, development announcements, releases, and security advisories.",
+    "creator": "ChAoS Foundation",
+    "domain": "www.chaos-mvc.org",
+    "certified": "No",
+    "files": [
+        "controllers/news.php",
+        "models/news_model.php",
+        "views/index.php",
+        "views/article.php",
+        "views/admin/index.php",
+        "sql/schema.sql",
+        "README.md"
+    ],
+    "routes": [
+        "index"
+    ],
+    "index_parameters": true,
+    "database_tables": [
+        "news_schema",
+        "news_articles"
+    ],
+    "migrations": {}
+}

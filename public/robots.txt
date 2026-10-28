@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.stn-labz.com/sitemap.xml
+Sitemap: https://www.stn-labz.com/ror.xml
+Sitemap: https://www.stn-labz.com/llms.txt
