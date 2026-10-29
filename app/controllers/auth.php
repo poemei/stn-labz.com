@@ -316,7 +316,7 @@ class auth extends controller
                     $_POST['password']
                     ?? ''
                 ),
-                'user_level' => 1,
+                'user_level' => 0,
             ];
 
             if (
