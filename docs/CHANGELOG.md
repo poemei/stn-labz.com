@@ -46,3 +46,9 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Log email delivery exceptions in PHP error log instead of silently discarding them. Email sending remains best-effort with existing mailer configuration; delivery is not yet verified and message retries/queueing are not implemented.
 - Changed only `user/modules/support/controllers/support.php` (`02fbf495`) and `user/modules/support/views/admin/ticket.php` (`6377b47f`). No SQL schema change, migration, Core change or deployment performed.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Support Assignment Selector Current Tier — OPERATOR TEST PENDING
+
+- Ticket `#10a04e` exposed that the `Assign to Support Tier` dropdown showed its first option (Tier 1) even while the ticket was assigned to Tier 4.
+- The Support ticket view now visibly displays the persisted current support tier and preselects that exact tier in the assignment dropdown, including legacy `dev` -> `t5` presentation. Existing tier permissions and server-side validation are unchanged.
+- Changed only `user/modules/support/views/admin/ticket.php` at `fefbaba9d4734b9aef6145896cd52e6211a1b70a`; no SQL, Core, routing, or deployment change. Live operator verification outstanding.
