@@ -34,9 +34,21 @@ final class admin_access
         }
     }
 
+    public static function supportTier(?int $accountId = null): int
+    {
+        $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
+        if ($accountId < 1) { return 0; }
+        try { return self::organization()->supportTier($accountId); }
+        catch (Throwable $error) {
+            error_log('Support responsibility resolution failed: ' . $error->getMessage());
+            return 0;
+        }
+    }
+
     /** The legacy level argument is retained for callers, never trusted. */
     public static function canAccess(int $accountId, int $userLevel, string $module): bool
     {
+        if ($module === 'support' && self::supportTier($accountId) > 0) { return true; }
         if (self::mission($accountId, $module)) {
             return true;
         }
@@ -85,7 +97,7 @@ final class admin_access
     public static function support(string $system, string $action, ?int $accountId = null): bool
     {
         $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
-        return organization_policy::supportAction(self::tier($accountId), $action)
+        return organization_policy::supportAction(self::supportTier($accountId), $action)
             && self::mission($accountId, 'support', $system);
     }
 
@@ -98,7 +110,7 @@ final class admin_access
     public static function supportTicket(array $ticket, string $action, ?int $accountId = null): bool
     {
         $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
-        $tier = self::tier($accountId);
+        $tier = self::supportTier($accountId);
         if (!organization_policy::supportAction($tier, $action)) {
             return false;
         }
