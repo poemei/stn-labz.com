@@ -250,7 +250,7 @@ final class support extends controller
         $target = 't' . $tier;
         return (string) ($ticket['tier'] ?? '') === $target
             && (string) ($ticket['assigned_to'] ?? '') === 'tier:' . $target
-            && admin_access::mission($accountId, 'support');
+            && $tier === admin_access::supportTier($accountId);
     }
 
     /** Enforce product scope and the actor's assigned responsibility. */
