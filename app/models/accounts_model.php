@@ -276,17 +276,46 @@ class accounts_model extends model
      */
     public function delete($id)
     {
-        $this->query(
-            "DELETE FROM accounts WHERE id = ?",
-            [(int)$id]
-        );
+        $id = (int) $id;
+        if ($id < 1) {
+            throw new InvalidArgumentException('Invalid account identifier.');
+        }
 
-        $check = $this->fetch(
-            "SELECT id FROM accounts WHERE id = ?",
-            [(int)$id]
-        );
+        $this->db->beginTransaction();
+        try {
+            $account = $this->fetch('SELECT id FROM accounts WHERE id = ? FOR UPDATE', [$id]);
+            if (!is_array($account)) {
+                $this->db->rollBack();
+                return false;
+            }
 
-        return $check === false;
+            // Certifications deliberately RESTRICT deleting both holders and
+            // issuers. Removing the account also removes certificates it held
+            // or issued, in the same transaction. Organization and legacy
+            // account records retain their declared ON DELETE CASCADE behavior.
+            $exists = $this->fetch(
+                'SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?',
+                ['certifications_records']
+            );
+            if ($exists) {
+                $this->query(
+                    'DELETE FROM certifications_records WHERE account_id = ? OR issued_by = ?',
+                    [$id, $id]
+                );
+            }
+
+            $deleted = $this->query('DELETE FROM accounts WHERE id = ?', [$id]);
+            if ($deleted->rowCount() !== 1) {
+                throw new RuntimeException('Account deletion did not remove exactly one account.');
+            }
+            $this->db->commit();
+            return true;
+        } catch (Throwable $error) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $error;
+        }
     }
 
     /**
