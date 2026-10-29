@@ -54,7 +54,7 @@ class accounts_model extends model
     {
         $role = (string) ($data['role'] ?? 'user');
         $levels = [
-            'user' => 1,
+            'user' => 0,
             'developer' => 7,
             'ai' => 7,
             'admin' => 9,
@@ -169,7 +169,7 @@ class accounts_model extends model
         array $modules
     ): bool {
         $levels = [
-            'user' => 1,
+            'user' => 0,
             'developer' => 7,
             'ai' => 7,
             'admin' => 9,
