@@ -11,6 +11,64 @@ final class certifications_model extends model
         );
     }
 
+    public function systemsReady(): bool
+    {
+        return (bool) $this->fetch(
+            'SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1',
+            ['certifications_systems']
+        );
+    }
+
+    /** Install the module's own idempotent SQL statements. */
+    private function runSql(string $file): void
+    {
+        $sql = file_get_contents($file);
+        if (!is_string($sql) || trim($sql) === '') {
+            throw new RuntimeException('Certifications SQL file is unavailable.');
+        }
+        foreach (explode(';', $sql) as $statement) {
+            if (trim($statement) !== '') { $this->query($statement); }
+        }
+    }
+
+    public function updateSchema(): void
+    {
+        if (!$this->ready()) {
+            throw new RuntimeException('Install certificate records schema first.');
+        }
+        if (!$this->systemsReady()) {
+            $this->runSql(__DIR__ . '/../sql/updates/20261029.1_system_registry.sql');
+        }
+    }
+
+    public function listSystems(): array
+    {
+        if (!$this->systemsReady()) { return []; }
+        $rows = $this->fetchAll(
+            'SELECT system_slug, display_name, active FROM certifications_systems ORDER BY display_name'
+        );
+        return is_array($rows) ? $rows : [];
+    }
+
+    public function addSystem(string $slug, string $name): void
+    {
+        $slug = strtolower(trim($slug));
+        $name = trim($name);
+        if (!preg_match('/^[a-z][a-z0-9_-]{0,62}$/', $slug)
+            || $name === '' || strlen($name) > 150 || !$this->systemsReady()) {
+            throw new InvalidArgumentException('Valid system identifier and display name required.');
+        }
+        $this->query('INSERT INTO certifications_systems (system_slug, display_name) VALUES (?,?)', [$slug, $name]);
+    }
+
+    public function setSystemActive(string $slug, bool $active): void
+    {
+        if (!preg_match('/^[a-z][a-z0-9_-]{0,62}$/', $slug) || !$this->systemsReady()) {
+            throw new InvalidArgumentException('Invalid system identifier.');
+        }
+        $this->query('UPDATE certifications_systems SET active=? WHERE system_slug=?', [$active ? 1 : 0, $slug]);
+    }
+
     public function installSchema(): void
     {
         if ($this->ready()) {
@@ -21,8 +79,7 @@ final class certifications_model extends model
         if (!is_string($sql) || trim($sql) === '') {
             throw new RuntimeException('Missing Certifications schema.');
         }
-        // schema.sql contains one CREATE TABLE statement and leading SQL comments.
-        $this->query($sql);
+        $this->runSql($file);
     }
 
     public function accounts(): array
@@ -54,7 +111,8 @@ final class certifications_model extends model
         $evidence = trim((string) ($entry['evidence_reference'] ?? ''));
         $issued = trim((string) ($entry['issued_on'] ?? ''));
         $expires = trim((string) ($entry['expires_on'] ?? ''));
-        if (!preg_match('/^[a-z][a-z0-9_-]{0,62}$/', $system)
+        if (!$this->systemsReady()
+            || !$this->fetch('SELECT system_slug FROM certifications_systems WHERE system_slug=? AND active=1', [$system])
             || $standard === '' || strlen($standard) > 255
             || $evidence === '' || strlen($evidence) > 255) {
             throw new InvalidArgumentException('System, standard and evidence are required.');
