@@ -169,7 +169,7 @@ final class support extends controller
         if ($ticketId === '') {
             $this->view('admin/index', [
                 'manage' => $manage, 'database_state' => $state, 'tickets' => array_values(array_filter($model->getTickets(),
-                    static fn (array $ticket): bool => admin_access::support((string) $ticket['type'], 'read'))), 'config' => $model->getConfig(),
+                    static fn (array $ticket): bool => admin_access::supportTicket($ticket, 'read'))), 'config' => $model->getConfig(),
                 'site_from_name' => $site['name'], 'site_from_email' => $site['email'],
             ]);
             return;
@@ -188,7 +188,7 @@ final class support extends controller
         $this->requireTicket($ticket, 'read');
         $permissions = [];
         foreach (['note', 'requester_email', 'status', 'tier', 'assign'] as $operation) {
-            $permissions[$operation] = admin_access::support((string) $ticket['type'], $operation);
+            $permissions[$operation] = admin_access::supportTicket($ticket, $operation);
         }
         $this->view('admin/ticket', [
             'permissions' => $permissions,
@@ -200,7 +200,7 @@ final class support extends controller
     /** Enforce product scope and the actor's assigned responsibility. */
     private function requireTicket(array $ticket, string $action): void
     {
-        if (!admin_access::support((string) $ticket['type'], $action)) {
+        if (!admin_access::supportTicket($ticket, $action)) {
             http_response_code(403);
             $this->error_page('This Support operation requires an eligible position and active mission for this system.');
         }
