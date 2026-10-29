@@ -123,7 +123,7 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 <td>
 
 <?php if ($a['id'] != ($_SESSION['user_id'] ?? 0)): ?>
-    <form method="POST" action="<?php echo URLROOT; ?>/accounts/delete/<?php echo (int) $a['id']; ?>">
+    <form method="POST" action="<?php echo URLROOT; ?>/accounts/delete/<?php echo (int) $a['id']; ?>" onsubmit="return confirm('Permanently delete this account and its dependent records, including certificates held or issued by it? This cannot be undone.');">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($this->csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
         <button type="submit">delete</button>
     </form>
