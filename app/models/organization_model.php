@@ -150,6 +150,50 @@ class organization_model extends model
         return $this->authorizationCache['permits'][$key] = false;
     }
 
+    /** Read-only authority trace for a Tier 9 account inspector. */
+    public function inspectSupportAuthority(int $id): array
+    {
+        $account = $this->account($id);
+        $state = $this->schemaState();
+        $result = [
+            'account_found' => $account !== null,
+            'account_level' => (int) ($account['user_level'] ?? 0),
+            'schema' => $state,
+            'position_tier' => null,
+            'effective_tier' => $this->tier($id),
+            'support_missions' => [],
+            'certification_systems' => [],
+            'support_permitted' => false,
+        ];
+        if ($account === null || $state !== 'ready') {
+            return $result;
+        }
+        $position = $this->fetch('SELECT tier FROM organization_positions WHERE account_id = ?', [$id]);
+        $result['position_tier'] = $position === false ? null : (int) $position['tier'];
+        $today = gmdate('Y-m-d');
+        $records = $this->records($id);
+        foreach ($records['missions'] as $mission) {
+            if ((string) $mission['module_slug'] === 'support') {
+                $result['support_missions'][] = [
+                    'system' => (string) $mission['system_slug'],
+                    'active' => (bool) $mission['active'],
+                    'expires_on' => $mission['expires_on'],
+                ];
+            }
+        }
+        foreach (array_merge($records['credentials'], $this->certificateCredentials($id, $today)) as $credential) {
+            if (($credential['kind'] ?? '') === 'certification') {
+                $result['certification_systems'][] = [
+                    'system' => (string) $credential['system_slug'],
+                    'status' => (string) $credential['status'],
+                    'expires_on' => $credential['expires_on'],
+                ];
+            }
+        }
+        $result['support_permitted'] = $this->permits($id, 'support');
+        return $result;
+    }
+
     /** Tier 9 is the existing assignment authority; validate it again on writes. */
     public function change(int $actor, int $id, array $input, array $modules): void
     {
