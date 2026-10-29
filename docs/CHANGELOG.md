@@ -94,3 +94,11 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Missing Certifications table is treated as no registry certificates. Existing `organization_credentials` and Level 7 transitional allowances are preserved; authorization is **not yet exclusively** based on certification + mission because the legacy fallback remains.
 - Source commit `4f00be5d1fe79f115b8cc053d6091be0773c2b96`. No schema modification, data migration, certificates created, production deployment or PHP/MySQL runtime verification performed.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Ordinary Account Level 0 Default — OPERATOR TEST PENDING
+
+- Changed `accounts_model::create()` normal `user` role mapping from Level 1 to Level 0, covering administrator-created ordinary users and public signups through the shared model. Existing `developer`, `ai` and `admin` role mappings remain 7, 7, 9 respectively.
+- Changed the public registration payload in `auth::register()` to explicitly declare Level 0 for consistency; account model still determines persisted level from role.
+- Changed `accounts_model::update_admin_access_profile()` ordinary `user` classification mapping to Level 0, preventing the Accounts Admin UI from restoring Level 1 when selecting the user role.
+- Existing account rows were not migrated or modified. No production SQL, deployment or runtime test executed. GitHub commits `7ee5e2e70765ec019e5fa614aa2ec8962a2312dc`, `291b073a977bd40f59f67af659aa9d433f6b0599`.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
