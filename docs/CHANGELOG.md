@@ -30,3 +30,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Tier 1 users are constrained to Tier 2 escalation in both controller validation and displayed selections. Other existing action and requester-email authorization boundaries are retained.
 - Scope: `user/modules/support/controllers/support.php` and `user/modules/support/views/admin/ticket.php`; revisions `6b7ea25`, `a406c5d`, `8b97967`. No Core, accounts, database, or deployment changes.
 - Source checks only; PHP runtime, mail delivery and end-to-end operator tests are outstanding. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Support Audit No-Op Correction — OPERATOR TEST PENDING
+
+- Based on the Operator's ticket `#10a04e` live history, adjusted `user/modules/support/models/support_model.php` so unchanged tier and unchanged assigned destination do not generate duplicate `t4 -> t4` or `tier:t4 -> tier:t4` audit records.
+- Existing real transitions continue through the same SQL writes and history events; historic entries remain untouched. Legacy `dev` is normalized to Tier 5 for no-op comparison only.
+- Source revision `1d3f11694ae59e84ccdef21b508be217b66cd493`. No SQL schema update is required, and no database migration, Core change, deployment or historical data cleanup was performed.
+- PHP runtime and Operator UI tests remain outstanding. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
