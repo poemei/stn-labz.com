@@ -244,9 +244,11 @@ final class support extends controller
                 if (!in_array($status, ['open','in_progress','waiting','resolved','closed'], true)) {
                     http_response_code(400); $this->error_page('Invalid Support ticket status.');
                 }
-                $model->setStatus($ticket, $status, $actor);
-                $ticket['status'] = $status;
-                $this->sendStatusNotification($model, $ticket);
+                if ($status !== (string) $ticket['status']) {
+                    $model->setStatus($ticket, $status, $actor);
+                    $ticket['status'] = $status;
+                    $this->sendStatusNotification($model, $ticket);
+                }
                 break;
             case 'tier':
                 $tier = strtolower(trim((string) ($_POST['tier'] ?? '')));
@@ -270,6 +272,7 @@ final class support extends controller
                 if ($tier !== $oldTier) {
                     $ticket['tier'] = $tier;
                     $this->sendTierNotification($model, $ticket, $actor, $note !== '' ? $note : null);
+                    $this->sendRequesterTierNotification($model, $ticket);
                 }
                 break;
             case 'assign':
@@ -284,10 +287,15 @@ final class support extends controller
                     http_response_code(403);
                     $this->error_page('General Support assigns escalations to Tier 2.');
                 }
+                $priorTier = (string) ($ticket['tier'] ?? 't1');
+                if ($priorTier === 'dev') { $priorTier = 't5'; }
                 $model->escalateTicket($ticket, $target, 'tier:' . $target, $actor, null);
                 $ticket['tier'] = $target;
                 $ticket['assigned_to'] = 'tier:' . $target;
-                $this->sendTierNotification($model, $ticket, $actor, null);
+                if ($target !== $priorTier) {
+                    $this->sendTierNotification($model, $ticket, $actor, null);
+                    $this->sendRequesterTierNotification($model, $ticket);
+                }
                 // [End AI:GPT-6]
                 break;
             case 'reply':
@@ -338,11 +346,31 @@ final class support extends controller
         $this->sendMail($model,$identity['email'],$identity['name'],'[Support #'.$id.'] Tier changed to '.$tier,$body);
     }
 
+    /** Public escalation notice: no internal findings, assignee or staff notes. */
+    private function sendRequesterTierNotification(support_model $model, array $ticket): void
+    {
+        // [AI:GPT-6 | 2026-10-29 UTC] Ticket lifecycle mail is automatic.
+        $id = (string) $ticket['ticket_id'];
+        $tier = $this->tierLabel((string) $ticket['tier']);
+        $this->sendMail(
+            $model,
+            (string) $ticket['email'],
+            (string) $ticket['name'],
+            '[Support #'.$id.'] Ticket transferred',
+            '<p>Hello '.$this->escapeHtml((string) $ticket['name']).',</p>'
+            .'<p>Your Support ticket <strong>#'.$this->escapeHtml($id)
+            .'</strong> has been transferred to '.$this->escapeHtml($tier).'.</p>'
+            .'<p><a href="'.URLROOT.'/support/ticket/'.rawurlencode($id)
+            .'">View your ticket</a></p>'
+        );
+        // [End AI:GPT-6]
+    }
+
     private function sendStatusNotification(support_model $model, array $ticket): void
     {
-        if (!admin_access::support((string) $ticket['type'], 'requester_email')) {
-            return;
-        }
+        // [AI:GPT-6 | 2026-10-29 UTC] Automated ticket-state notices
+        // reflect a permitted state change, not an agent's right to send
+        // manual requester correspondence. Never include internal notes.
         $id=(string)$ticket['ticket_id']; $status=strtoupper(str_replace('_',' ',(string)$ticket['status']));
         $this->sendMail($model,(string)$ticket['email'],(string)$ticket['name'],'[Support #'.$id.'] '.$status,
             '<p>Hello '.$this->escapeHtml((string)$ticket['name']).',</p><p>Your Support ticket <strong>#'.$this->escapeHtml($id).'</strong> is now <strong>'.$this->escapeHtml($status).'</strong>.</p><p><a href="'.URLROOT.'/support/ticket/'.rawurlencode($id).'">View your Support ticket</a></p>');
@@ -365,7 +393,9 @@ final class support extends controller
             $identity=$this->supportIdentity($model);
             if ($identity['email'] !== '') { $mail->setFrom($identity['email'], $identity['name']); }
             $mail->addAddress($address,$name); $mail->isHTML(true); $mail->Subject=$subject; $mail->Body=$body; $mail->send();
-        } catch (Throwable $e) { }
+        } catch (Throwable $e) {
+            error_log('Support email delivery failed: ' . $e->getMessage());
+        }
     }
 
     private function supportIdentity(support_model $model): array
