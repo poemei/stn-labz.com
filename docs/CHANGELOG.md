@@ -138,3 +138,11 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Corrected the Support Admin empty queue message. Tickets are filtered by the account's current topic-scoped Support read authorization, so an empty visible queue must not claim that no tickets have been submitted.
 - No authorization grants or mission-scope changes were made. Digit's missing Rictus-submitted ticket remains under investigation until the ticket's actual topic and Digit's matching mission scope are verified.
 - Commit `fbefe59d31ba481d7f67d69bd56a9fccc7a3e2a1`. No runtime test performed.
+
+## 2026-10-29 — Support tier destination queue authorization — OPERATOR TEST PENDING
+
+- Introduced `admin_access::supportTicket()` to authorize topic-matching Support tickets OR tickets explicitly escalated and assigned to the account's Organization Support tier (`tier:tN` destination with matching `tN` ticket tier). The destination path requires an active certified Support mission and tier-allowed action; it is not granted by account Level 7 alone.
+- Applied the same ticket authorization to Support Admin list filtering, direct ticket routes, action checks and per-ticket action permissions. Requester-facing email permissions remain restricted to the existing action rules and topic scope.
+- Changed the empty-queue explanation to mention topic and assigned-tier routing. No database/schema changes or accounts, missions or tickets modified by source changes.
+- Source commits: `1e184a879f6bb6195f1d6724fae9f44bee8bff1f`, `c3e5054fe325a1f74607663995cac1e1424bffdc`, `281ddd368437b590d7964fe6d80aa29aeb666e46`.
+- **Pending PHP runtime and operator tests**: Tier 5 assigned ticket visible for Digit; unassigned different-topic ticket hidden; withdrawn/revoked credentials deny access; direct ticket URL and POST actions match authorized queue.
