@@ -193,7 +193,7 @@ final class support extends controller
                     'revision' => 'support-queue-20261029-b',
                     'tier' => $tier,
                     'mission' => $mission,
-                    'tier5_present' => $tier === 5 ? $routed : null,
+                    'tier5_present' => $tier === 5 && $mission ? $routed : null,
                 ];
             }
             $this->view('admin/index', [
