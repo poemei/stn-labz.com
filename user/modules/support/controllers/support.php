@@ -176,17 +176,8 @@ final class support extends controller
         foreach (['note', 'requester_email', 'status', 'tier', 'assign'] as $operation) {
             $permissions[$operation] = admin_access::support((string) $ticket['type'], $operation);
         }
-        $candidates = [];
-        foreach ((new accounts_model())->get_all() as $account) {
-            $candidateId = (int) $account['id'];
-            $candidateTier = admin_access::tier($candidateId);
-            if ($candidateTier >= 1 && $candidateTier <= 5
-                && admin_access::support((string) $ticket['type'], 'read', $candidateId)) {
-                $candidates[] = ['id' => $candidateId, 'tier' => $candidateTier, 'name' => $account['display_name'] ?: $account['username']];
-            }
-        }
         $this->view('admin/ticket', [
-            'permissions' => $permissions, 'candidates' => $candidates,
+            'permissions' => $permissions,
             'database_state'=>$state, 'ticket'=>$ticket,
             'replies'=>$model->getReplies((int)$ticket['id']), 'events'=>$model->getEvents((int)$ticket['id']),
         ]);
@@ -199,19 +190,6 @@ final class support extends controller
             http_response_code(403);
             $this->error_page('This Support operation requires an eligible position and active mission for this system.');
         }
-    }
-
-    /** Escalation selects a real, currently eligible account, never free text. */
-    private function validatedAssignee(array $ticket, string $tier): string
-    {
-        $id = filter_var($_POST['assigned_to'] ?? null, FILTER_VALIDATE_INT);
-        $targetTier = $tier === 'dev' ? 5 : (int) substr($tier, 1);
-        if (!$id || admin_access::tier($id) !== $targetTier
-            || !admin_access::support((string) $ticket['type'], 'read', $id)) {
-            http_response_code(400);
-            $this->error_page('Select a mission-assigned person with the target support tier and required current credentials.');
-        }
-        return 'account:' . $id;
     }
 
     private function saveConfiguration(support_model $model): void
@@ -283,18 +261,34 @@ final class support extends controller
                 $note = trim((string) ($_POST['note'] ?? ''));
                 $oldTier = strtolower((string) ($ticket['tier'] ?? 't1'));
                 if ($oldTier === 'dev') { $oldTier = 't5'; }
-                $assignee = $this->validatedAssignee($ticket, $tier);
-                $model->escalateTicket($ticket, $tier, $assignee, $actor, $note !== '' ? $note : null);
+                /* [AI:GPT-6 | 2026-10-29 UTC]
+                 * Escalation targets the receiving tier queue, never a person.
+                 * Preserve the original ticket and both audit events.
+                 */
+                $model->escalateTicket($ticket, $tier, 'tier:' . $tier, $actor, $note !== '' ? $note : null);
+                /* [End AI:GPT-6] */
                 if ($tier !== $oldTier) {
                     $ticket['tier'] = $tier;
                     $this->sendTierNotification($model, $ticket, $actor, $note !== '' ? $note : null);
                 }
                 break;
             case 'assign':
-                $assignee = $this->validatedAssignee($ticket, (string) $ticket['tier']);
-                $model->assignTicket($ticket, $assignee !== '' ? $assignee : null, $actor);
-                $ticket['assigned_to'] = $assignee;
-                $this->sendUpdateNotification($model, $ticket, 'Assignment updated');
+                // [AI:GPT-6 | 2026-10-29 UTC] Assignment selects an operational
+                // tier destination; it cannot select or impersonate a person.
+                $target = strtolower(trim((string) ($_POST['destination'] ?? '')));
+                if (!in_array($target, ['t1', 't2', 't3', 't4', 't5'], true)) {
+                    http_response_code(400);
+                    $this->error_page('Invalid Support destination tier.');
+                }
+                if (admin_access::tier() === 1 && $target !== 't2') {
+                    http_response_code(403);
+                    $this->error_page('General Support assigns escalations to Tier 2.');
+                }
+                $model->escalateTicket($ticket, $target, 'tier:' . $target, $actor, null);
+                $ticket['tier'] = $target;
+                $ticket['assigned_to'] = 'tier:' . $target;
+                $this->sendTierNotification($model, $ticket, $actor, null);
+                // [End AI:GPT-6]
                 break;
             case 'reply':
                 $message = trim((string) ($_POST['message'] ?? ''));
