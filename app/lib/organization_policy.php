@@ -34,23 +34,32 @@ final class organization_policy
                 || (!empty($mission['expires_on']) && $mission['expires_on'] < $today)) {
                 continue;
             }
-            if (!self::technical($tier)) {
-                return true;
-            }
-            $valid = [];
+            /*
+             * [AI:GPT-6 | 2026-10-29 UTC]
+             * Every mission requires a current, matching certification.
+             * Technical positions additionally require qualification at
+             * their responsibility tier. No credential is itself a mission.
+             */
+            $certified = false;
+            $qualified = false;
             foreach ($credentials as $credential) {
-                if ($credential['system_slug'] === $mission['system_slug']
-                    && $credential['status'] === 'active'
-                    && (empty($credential['expires_on']) || $credential['expires_on'] >= $today)) {
-                    if ($credential['kind'] === 'certification'
-                        || ($credential['kind'] === 'qualification' && (int) ($credential['qualification_tier'] ?? 0) === $tier)) {
-                        $valid[$credential['kind']] = true;
-                    }
+                if ($credential['system_slug'] !== $mission['system_slug']
+                    || $credential['status'] !== 'active'
+                    || (!empty($credential['expires_on']) && $credential['expires_on'] < $today)) {
+                    continue;
+                }
+                if ($credential['kind'] === 'certification') {
+                    $certified = true;
+                }
+                if ($credential['kind'] === 'qualification'
+                    && (int) ($credential['qualification_tier'] ?? 0) === $tier) {
+                    $qualified = true;
                 }
             }
-            if (isset($valid['certification'], $valid['qualification'])) {
+            if ($certified && (!self::technical($tier) || $qualified)) {
                 return true;
             }
+            /* [End AI:GPT-6] */
         }
         return false;
     }
