@@ -101,6 +101,19 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 <p>Manage support tickets, assignment, support tier, escalation, and lifecycle.</p>
 
                 <?php if ($tickets === []): ?>
+                    <?php if (is_array($data['queue_diagnostic'] ?? null)): ?>
+                        <?php $check = $data['queue_diagnostic']; ?>
+                        <p class="small text-muted">
+                            Support queue diagnostics (<?= $escape($check['revision']); ?>):
+                            effective Organization tier <?= (int) $check['tier']; ?>;
+                            active certified Support mission <?= !empty($check['mission']) ? 'YES' : 'NO'; ?>;
+                            <?php if ($check['tier5_present'] !== null): ?>
+                                Tier 5 routing present <?= $check['tier5_present'] ? 'YES' : 'NO'; ?>.
+                            <?php else: ?>
+                                Tier 5 routing check unavailable for this authorization.
+                            <?php endif; ?>
+                        </p>
+                    <?php endif; ?>
                     <div class="alert alert-info">
                         No tickets are available within your currently authorized Support mission scope.
                         Tickets are visible when your certified Support mission covers their topic or when they are explicitly routed
