@@ -37,7 +37,36 @@ final class admin_access
     /** The legacy level argument is retained for callers, never trusted. */
     public static function canAccess(int $accountId, int $userLevel, string $module): bool
     {
-        return self::mission($accountId, $module);
+        if (self::mission($accountId, $module)) {
+            return true;
+        }
+
+        /*
+         * [AI:GPT-6 | 2026-10-29 UTC]
+         * Restore existing, specifically assigned Developer/AI Level 7 module
+         * allowances during Mission Control credential/mission adoption.
+         * This cannot assign new modules, confer Tier 9 authority, or grant
+         * access to restricted Core administration.
+         * Existing allowance records remain the transitional authority only.
+         */
+        if ($accountId < 1 || !self::isAssignable($module) || self::tier($accountId) !== 7) {
+            return false;
+        }
+
+        try {
+            require_once APPROOT . '/models/accounts_model.php';
+            $account = (new accounts_model())->get_by_id($accountId);
+            if (!is_array($account)
+                || !in_array((string) ($account['role'] ?? ''), ['developer', 'ai'], true)
+                || (int) ($account['user_level'] ?? 0) !== 7) {
+                return false;
+            }
+            return (new accounts_model())->has_admin_module_access($accountId, $module);
+        } catch (Throwable $error) {
+            error_log('Level 7 module allowance lookup failed: ' . $error->getMessage());
+            return false;
+        }
+        /* [End AI:GPT-6] */
     }
 
     public static function mission(int $accountId, string $module, ?string $system = null): bool
