@@ -126,7 +126,7 @@ final class admin_access
         $target = 't' . $tier;
         return (string) ($ticket['tier'] ?? '') === $target
             && (string) ($ticket['assigned_to'] ?? '') === 'tier:' . $target
-            && self::mission($accountId, 'support');
+            && $tier === self::supportTier($accountId);
     }
 
     /** Navigation visibility is based on current grants, not position alone. */
