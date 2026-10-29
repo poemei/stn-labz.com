@@ -204,10 +204,22 @@ final class support extends controller
      */
     private static function ticketAccess(array $ticket, string $action): bool
     {
-        if (method_exists(admin_access::class, 'supportTicket')) {
-            return admin_access::supportTicket($ticket, $action);
+        $accountId = (int) ($_SESSION['user_id'] ?? 0);
+        $tier = admin_access::tier($accountId);
+        if (!organization_policy::supportAction($tier, $action)) {
+            return false;
         }
-        return admin_access::support((string) ($ticket['type'] ?? ''), $action);
+        $system = (string) ($ticket['type'] ?? '');
+        if ($system !== '' && admin_access::mission($accountId, 'support', $system)) {
+            return true;
+        }
+        if ($action === 'requester_email' || $tier < 1 || $tier > 5) {
+            return false;
+        }
+        $target = 't' . $tier;
+        return (string) ($ticket['tier'] ?? '') === $target
+            && (string) ($ticket['assigned_to'] ?? '') === 'tier:' . $target
+            && admin_access::mission($accountId, 'support');
     }
 
     /** Enforce product scope and the actor's assigned responsibility. */
