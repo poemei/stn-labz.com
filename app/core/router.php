@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Router
@@ -278,7 +280,7 @@ class router
                  *
                  * admin::index() remains the admin dispatcher.
                  */
-                if ((int) ($_SESSION['user_level'] ?? 0) < 7) {
+                if (admin_access::tier() < 1) {
                     header('Location: /auth/login');
                     exit;
                 }
@@ -368,9 +370,9 @@ class router
             $module = $this->controller_scope === 'user'
                 ? (string) $this->module_context
                 : strtolower(get_class($this->controller));
-            $level = (int) ($_SESSION['user_level'] ?? 0);
+            $level = admin_access::tier();
 
-            if ($level < 7) {
+            if ($level < 1) {
                 header('Location: /auth/login');
                 exit;
             }
@@ -656,6 +658,7 @@ class router
 
         $routes = [
             'accounts' => [
+                'organization',
                 'admin',
                 'create',
                 'delete',
@@ -868,3 +871,5 @@ class router
     }
 }
 /* [End AI:GPT-5.6 Sol] */
+
+/* [End AI:GPT-6] */

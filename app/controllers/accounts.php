@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Accounts Controller
@@ -207,6 +209,38 @@ class accounts extends controller
         exit;
     }
 
+    /** Manage organization records under existing Tier 9 authority. */
+    public function organization($params = []): void
+    {
+        $this->require_admin(9);
+        $model = new organization_model();
+        $modules = $this->discoverAssignableAdminModules();
+        $error = null;
+        $id = (int) ($_POST['account_id'] ?? $_GET['account_id'] ?? 0);
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+            $this->require_csrf();
+            try {
+                if (($_POST['action'] ?? '') === 'install_organization') {
+                    $model->install();
+                } else {
+                    $model->change((int) $_SESSION['user_id'], $id, $_POST, $modules);
+                }
+                header('Location: /accounts/organization?account_id=' . $id);
+                exit;
+            } catch (InvalidArgumentException $exception) {
+                http_response_code(400);
+                $error = $exception->getMessage();
+            }
+        }
+        $ready = $model->ready();
+        $this->view('admin/organization', [
+            'ready' => $ready, 'error' => $error, 'account_id' => $id,
+            'accounts' => $this->model('accounts_model')->get_all(),
+            'modules' => $modules, 'tiers' => organization_policy::TIERS,
+            'records' => $ready && $id > 0 ? $model->records($id) : [],
+        ]);
+    }
+
     private function updateAccessProfile(): void
     {
         $this->verify_csrf();
@@ -321,3 +355,5 @@ class accounts extends controller
         return array_values(array_unique($modules));
     }
 }
+
+/* [End AI:GPT-6] */

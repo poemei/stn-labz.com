@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 final class support_model extends model
 {
     private const TABLES = [
@@ -233,6 +235,22 @@ final class support_model extends model
         $this->addEvent((int) $ticket['id'], 'tier', (string) $ticket['tier'], $tier, $actor, $note);
     }
 
+    /** Change escalation and assignment together, preserving the event history. */
+    public function escalateTicket(array $ticket, string $tier, string $assignee, string $actor, ?string $note): void
+    {
+        $this->db->beginTransaction();
+        try {
+            $this->setTier($ticket, $tier, $actor, $note);
+            $this->assignTicket($ticket, $assignee, $actor);
+            $this->db->commit();
+        } catch (Throwable $error) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $error;
+        }
+    }
+
     public function assignTicket(array $ticket, ?string $assignee, string $actor): void
     {
         $this->query(
@@ -299,3 +317,5 @@ final class support_model extends model
         return $ticketId;
     }
 }
+
+/* [End AI:GPT-6] */

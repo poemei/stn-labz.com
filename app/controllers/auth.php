@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Auth Controller
@@ -721,10 +723,7 @@ class auth extends controller
             !isset(
                 $_SESSION['user_id']
             )
-            || (int) (
-                $_SESSION['user_level']
-                ?? 0
-            ) !== 9
+            || admin_access::tier() !== 9
         ) {
             header(
                 'Location: /login'
@@ -872,3 +871,5 @@ class auth extends controller
 }
 
 /* [End AI:GPT-5.6 Sol] */
+
+/* [End AI:GPT-6] */

@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Administration Controller
@@ -51,8 +53,7 @@ class admin extends controller
     public function index($params = []): void
     {
         if (
-            !isset($_SESSION['user_level'])
-            || $_SESSION['user_level'] < 7
+            admin_access::tier() < 1
         ) {
             header('Location: /auth/login');
             exit;
@@ -2472,3 +2473,5 @@ class admin extends controller
         }
     }
 }
+
+/* [End AI:GPT-6] */

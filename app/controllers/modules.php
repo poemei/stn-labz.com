@@ -7,10 +7,9 @@ class modules extends controller
 
     public function admin($url = [])
     {
-        if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] < 9) {
-            header("Location: /admin");
-            exit;
-        }
+        /* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+        $this->require_admin(9);
+        /* [End AI:GPT-6] */
 
         /*
          * CMSEC-2026-4830-A — Separated module discovery

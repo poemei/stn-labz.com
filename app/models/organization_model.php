@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+/** Core-owned organization records, with explicit additive SQL installation. */
+class organization_model extends model
+{
+    public function ready(): bool
+    {
+        return $this->schemaState() === 'ready';
+    }
+
+    private function schemaState(): string
+    {
+        $found = 0;
+        foreach (['organization_positions', 'organization_credentials', 'organization_missions'] as $table) {
+            if ($this->fetch('SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?', [$table])) {
+                $found++;
+            }
+        }
+        return $found === 3 ? 'ready' : ($found === 0 ? 'missing' : 'partial');
+    }
+
+    public function install(): void
+    {
+        $sql = file_get_contents(APPROOT . '/install/organization.sql');
+        if ($sql === false) {
+            throw new RuntimeException('Organization schema is unavailable.');
+        }
+        foreach (explode(';', $sql) as $statement) {
+            if (trim($statement) !== '') {
+                $this->query($statement);
+            }
+        }
+    }
+
+    public function account(int $id): ?array
+    {
+        $row = $this->fetch('SELECT id, username, user_level, role FROM accounts WHERE id = ?', [$id]);
+        return is_array($row) ? $row : null;
+    }
+
+    public function tier(int $id): int
+    {
+        $account = $this->account($id);
+        if ($account === null) {
+            return 0;
+        }
+        if ((int) $account['user_level'] >= 9) {
+            return 9;
+        }
+        $state = $this->schemaState();
+        if ($state === 'partial') {
+            return 0;
+        }
+        if ($state === 'ready') {
+            $position = $this->fetch('SELECT tier FROM organization_positions WHERE account_id = ?', [$id]);
+            if ($position) {
+                $tier = (int) $position['tier'];
+                return $tier >= 1 && $tier <= 8 ? $tier : 0;
+            }
+        }
+        return in_array((int) $account['user_level'], [7, 8], true) ? (int) $account['user_level'] : 0;
+    }
+
+    public function records(int $id): array
+    {
+        return [
+            'position' => $this->fetch('SELECT * FROM organization_positions WHERE account_id = ?', [$id]),
+            'credentials' => $this->fetchAll('SELECT * FROM organization_credentials WHERE account_id = ? ORDER BY id', [$id]),
+            'missions' => $this->fetchAll('SELECT * FROM organization_missions WHERE account_id = ? ORDER BY id', [$id]),
+        ];
+    }
+
+    public function permits(int $id, string $module, ?string $system = null): bool
+    {
+        $tier = $this->tier($id);
+        if ($tier === 9) {
+            return true;
+        }
+        if ($tier === 0 || !admin_access::isAssignable($module)) {
+            return false;
+        }
+        if ($module === 'support' && !organization_policy::supportAction($tier, 'read')) {
+            return false;
+        }
+        if ($this->ready()) {
+            $records = $this->records($id);
+            if (organization_policy::permits($tier, $records['missions'], $records['credentials'], $module, $system, gmdate('Y-m-d'))) {
+                return true;
+            }
+        }
+        // Retain legacy allowance records, but never use them to bypass an
+        // explicit mission or required current credentials.
+        return false;
+    }
+
+    /** Tier 9 is the existing assignment authority; validate it again on writes. */
+    public function change(int $actor, int $id, array $input, array $modules): void
+    {
+        if ($this->tier($actor) !== 9 || $this->account($id) === null || !$this->ready()) {
+            throw new InvalidArgumentException('Organization management is unavailable or unauthorized.');
+        }
+        $action = (string) ($input['action'] ?? '');
+        if ($action === 'position') {
+            $tier = filter_var($input['tier'] ?? null, FILTER_VALIDATE_INT);
+            // Existing account classification remains the only TSC grant path.
+            if (!isset(organization_policy::TIERS[$tier]) || $tier === 9 || $this->tier($id) === 9) {
+                throw new InvalidArgumentException('Choose a position from tiers 1–8 for a non-administrator account.');
+            }
+            $name = trim((string) ($input['position_name'] ?? ''));
+            if ($name === '' || strlen($name) > 150) {
+                throw new InvalidArgumentException('A position name of at most 150 bytes is required.');
+            }
+            $this->query('INSERT INTO organization_positions (account_id,tier,position_name,changed_by) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE tier=VALUES(tier),position_name=VALUES(position_name),changed_by=VALUES(changed_by)', [$id, $tier, $name, $actor]);
+            return;
+        }
+        if (in_array($action, ['withdraw', 'credential_status'], true)) {
+            $record = filter_var($input['record_id'] ?? null, FILTER_VALIDATE_INT);
+            if (!$record || $record < 1) {
+                throw new InvalidArgumentException('Invalid record.');
+            }
+            if ($action === 'withdraw') {
+                $this->query('UPDATE organization_missions SET active=0,changed_by=? WHERE id=? AND account_id=?', [$actor, $record, $id]);
+            } else {
+                $status = (string) ($input['status'] ?? '');
+                if (!in_array($status, ['pending', 'active', 'suspended', 'expired', 'revoked'], true)) {
+                    throw new InvalidArgumentException('Invalid credential status.');
+                }
+                $this->query('UPDATE organization_credentials SET status=?,changed_by=? WHERE id=? AND account_id=?', [$status, $actor, $record, $id]);
+            }
+            return;
+        }
+        if (!in_array($action, ['credential', 'mission'], true)) {
+            throw new InvalidArgumentException('Invalid organization action.');
+        }
+        $system = trim((string) ($input['system_slug'] ?? ''));
+        if (!preg_match('/^[a-z][a-z0-9_-]{0,62}$/', $system)) {
+            throw new InvalidArgumentException('A valid system identifier is required.');
+        }
+        $expires = trim((string) ($input['expires_on'] ?? ''));
+        if ($expires !== '') {
+            $date = DateTimeImmutable::createFromFormat('!Y-m-d', $expires);
+            if (!$date || $date->format('Y-m-d') !== $expires) {
+                throw new InvalidArgumentException('Invalid expiration date.');
+            }
+        }
+        if ($action === 'credential') {
+            $kind = (string) ($input['kind'] ?? '');
+            $standard = trim((string) ($input['standard_reference'] ?? ''));
+            $evidence = trim((string) ($input['evidence_reference'] ?? ''));
+            if (!in_array($kind, ['certification', 'qualification'], true) || $standard === '' || $evidence === '' || strlen($standard) > 255 || strlen($evidence) > 255) {
+                throw new InvalidArgumentException('Credential kind, approved standard, and evidence references are required.');
+            }
+            $qualificationTier = $kind === 'qualification' ? (int) ($input['qualification_tier'] ?? 0) : null;
+            if ($kind === 'qualification' && ($qualificationTier < 1 || $qualificationTier > 8)) {
+                throw new InvalidArgumentException('Choose the responsibility tier demonstrated by this qualification.');
+            }
+            $this->query('INSERT INTO organization_credentials (account_id,kind,qualification_tier,system_slug,standard_reference,evidence_reference,expires_on,changed_by) VALUES (?,?,?,?,?,?,?,?)', [$id, $kind, $qualificationTier, $system, $standard, $evidence, $expires ?: null, $actor]);
+            return;
+        }
+        $module = (string) ($input['module_slug'] ?? '');
+        $reference = trim((string) ($input['mission_reference'] ?? ''));
+        if (!in_array($module, $modules, true) || !admin_access::isAssignable($module) || $reference === '' || strlen($reference) > 255) {
+            throw new InvalidArgumentException('An installed assignable module and mission authority reference are required.');
+        }
+        $this->query('INSERT INTO organization_missions (account_id,module_slug,system_slug,mission_reference,expires_on,changed_by) VALUES (?,?,?,?,?,?)', [$id, $module, $system, $reference, $expires ?: null, $actor]);
+    }
+}
+/* [End AI:GPT-6] */

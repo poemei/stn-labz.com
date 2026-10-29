@@ -3,6 +3,13 @@
 
 **Current Version:** 1.1.9
 
+## STN-LABZ website — 2026-10-28 — Pending human review
+
+- Added nine organizational position tiers, separate certification/qualification records, and explicit module/system missions managed by existing Tier 9 authority.
+- Added current-record Core authorization, immediate revocation, responsibility-specific technical qualification, and preserved legacy module allowances during explicit adoption.
+- Restricted Support requester correspondence to Tiers 1–2; added product-scoped queues, eligible account-based escalation and internal-only technical findings.
+- Added explicit additive organization SQL installation and regression coverage. See [organization access handoff](ORGANIZATION_ACCESS.md) for adoption and verification limits.
+
 ## v1.1.10 Development — Unreleased
 
 > Pre-release maintenance only. The current release remains v1.1.9 until the

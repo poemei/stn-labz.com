@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Chaos MVC Base Controller
@@ -203,14 +205,15 @@ class controller
      */
     protected function require_admin(int $level = 7): void
     {
-        $currentLevel = (int) ($_SESSION['user_level'] ?? 0);
+        $currentLevel = admin_access::tier();
 
-        if ($currentLevel < $level) {
+        if ($currentLevel < $level && !($level === 7 && $currentLevel > 0
+            && $this->has_admin_module_access($this->module_context ?? strtolower(static::class)))) {
             header('Location: /login');
             exit;
         }
 
-        if ($level <= 7 && $currentLevel < 9) {
+        if ($currentLevel < 9) {
             $module = $this->module_context ?? strtolower(static::class);
             $this->require_admin_module_access($module);
         }
@@ -679,3 +682,5 @@ class controller
         );
     }
 }
+
+/* [End AI:GPT-6] */

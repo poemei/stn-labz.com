@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * Certification Controller
@@ -84,6 +86,7 @@ class certification extends controller
     {
         $data = [
             'title' => 'Positions & Tiers',
+            'tiers' => organization_policy::TIERS,
             'principle' => (
                 'Position Tier determines eligibility for consideration. '
                 . 'It does not grant access.'
@@ -261,3 +264,5 @@ class certification extends controller
 }
 
 /* [End AI:GPT-5.6 Sol] */
+
+/* [End AI:GPT-6] */

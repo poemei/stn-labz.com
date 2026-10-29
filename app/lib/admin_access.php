@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-/**
- * Core-owned authorization policy for restricted Admin participants.
- */
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+/** Core authorization shared by dispatch, navigation and module operations. */
 final class admin_access
 {
-    private const RESTRICTED_MODULES = [
-        'accounts',
-        'admin',
-        'auth',
-        'error_handler',
-        'install',
-        'modules',
-        'updater',
-    ];
+    private static ?organization_model $organization = null;
+    private const RESTRICTED_MODULES = ['accounts', 'admin', 'auth', 'error_handler', 'install', 'modules', 'updater'];
+
+    private static function organization(): organization_model
+    {
+        return self::$organization ??= new organization_model();
+    }
 
     public static function isAssignable(string $module): bool
     {
@@ -23,61 +20,52 @@ final class admin_access
             && !in_array($module, self::RESTRICTED_MODULES, true);
     }
 
-    public static function canAccess(
-        int $accountId,
-        int $userLevel,
-        string $module
-    ): bool {
-        if ($userLevel >= 9) {
-            return true;
+    public static function tier(?int $accountId = null): int
+    {
+        $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
+        if ($accountId < 1) {
+            return 0;
         }
+        try {
+            return self::organization()->tier($accountId);
+        } catch (Throwable $error) {
+            error_log('Organization authorization failed: ' . $error->getMessage());
+            return 0;
+        }
+    }
 
-        if ($userLevel < 7 || $accountId < 1 || !self::isAssignable($module)) {
+    /** The legacy level argument is retained for callers, never trusted. */
+    public static function canAccess(int $accountId, int $userLevel, string $module): bool
+    {
+        return self::mission($accountId, $module);
+    }
+
+    public static function mission(int $accountId, string $module, ?string $system = null): bool
+    {
+        if ($accountId < 1) {
             return false;
         }
-
         try {
-            require_once APPROOT . '/models/accounts_model.php';
-            return (new accounts_model())->has_admin_module_access(
-                $accountId,
-                $module
-            );
+            return self::organization()->permits($accountId, $module, $system);
         } catch (Throwable $error) {
-            error_log('Admin module authorization failed: ' . $error->getMessage());
+            error_log('Mission authorization failed: ' . $error->getMessage());
             return false;
         }
     }
 
-    /**
-     * @param array<int, string> $modules
-     * @return array<int, string>
-     */
+    public static function support(string $system, string $action, ?int $accountId = null): bool
+    {
+        $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
+        return organization_policy::supportAction(self::tier($accountId), $action)
+            && self::mission($accountId, 'support', $system);
+    }
+
+    /** @param array<int,string> $modules @return array<int,string> */
     public static function filterForCurrentAccount(array $modules): array
     {
-        $level = (int) ($_SESSION['user_level'] ?? 0);
-        if ($level >= 9) {
-            return $modules;
-        }
-
-        $accountId = (int) ($_SESSION['user_id'] ?? 0);
-        if ($accountId < 1) {
-            return [];
-        }
-
-        try {
-            require_once APPROOT . '/models/accounts_model.php';
-            $granted = (new accounts_model())->get_admin_modules_for_account(
-                $accountId
-            );
-        } catch (Throwable $error) {
-            error_log('Admin navigation authorization failed: ' . $error->getMessage());
-            return [];
-        }
-
-        return array_values(array_filter(
-            $modules,
-            static fn (string $module): bool => self::isAssignable($module)
-                && in_array($module, $granted, true)
-        ));
+        return array_values(array_filter($modules, static fn (string $module): bool => self::canAccess(
+            (int) ($_SESSION['user_id'] ?? 0), 0, $module
+        )));
     }
 }
+/* [End AI:GPT-6] */

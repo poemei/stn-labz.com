@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /**
  * STN-LABZ Positions and Tiers
@@ -54,6 +56,13 @@ $fields = $data['position_fields'] ?? [];
 <div class="positions-page">
 
     <h1>Positions &amp; Tiers</h1>
+
+    <table class="table"><thead><tr><th>Tier</th><th>Position</th></tr></thead><tbody>
+    <?php foreach (array_reverse($data['tiers'] ?? [], true) as $tier => $position): ?>
+        <tr><td><?= (int) $tier; ?></td><td><?= htmlspecialchars($position, ENT_QUOTES, 'UTF-8'); ?></td></tr>
+    <?php endforeach; ?>
+    </tbody></table>
+    <p>Tier 9 preserves unrestricted Administrator / TSC authority. Other tiers require applicable mission assignments. Technical investigation requires the matching product certification and responsibility-specific qualification.</p>
 
     <p>
         STN-LABZ positions define organizational responsibility.
@@ -128,3 +137,5 @@ $fields = $data['position_fields'] ?? [];
 <!-- [End AI:GPT-5.6 Sol] -->
 
 <?php require APPROOT . '/views/inc/foot.php'; ?>
+
+<!-- [End AI:GPT-6] -->
