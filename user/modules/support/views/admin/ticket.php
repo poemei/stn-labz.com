@@ -51,7 +51,7 @@ $permissions = $data['permissions'] ?? [];
 </select><button type="submit" class="btn btn-secondary">Assign to Tier Queue</button></form></div></section>
 <!-- [End AI:GPT-6] -->
 <?php endif; ?>
-<?php if($events!==[]): ?><section class="card"><div class="card-body"><h2 class="h5">History</h2><?php foreach($events as $event): ?><div class="border-bottom py-2"><strong><?= $escape($event['event_type']); ?></strong><?php if(($event['from_value']??null)!==null||($event['to_value']??null)!==null): ?><div><?= $escape($event['from_value']??'—'); ?> &rarr; <?= $escape($event['to_value']??'—'); ?></div><?php endif; ?><?php if(($event['note']??'')!==''): ?><div><?= nl2br($escape($event['note'])); ?></div><?php endif; ?><small class="text-muted"><?= $escape($event['actor']??'System'); ?> · <?= $escape($event['created_at']); ?></small></div><?php endforeach; ?></div></section><?php endif; ?>
+<?php if($events!==[]): ?><section class="card"><div class="card-body"><h2 class="h5">History</h2><?php foreach($events as $event): ?><div class="border-bottom py-2"><strong class="d-block"><?= $escape(ucwords(str_replace('_', ' ', (string)$event['event_type']))); ?></strong><?php if(($event['from_value']??null)!==null||($event['to_value']??null)!==null): ?><div><?= $escape($event['from_value']??'—'); ?> &rarr; <?= $escape($event['to_value']??'—'); ?></div><?php endif; ?><?php if(($event['note']??'')!==''): ?><div><?= nl2br($escape($event['note'])); ?></div><?php endif; ?><small class="text-muted"><?= $escape($event['actor']??'System'); ?> · <?= $escape($event['created_at']); ?></small></div><?php endforeach; ?></div></section><?php endif; ?>
 </div></div>
 <?php endif; ?>
 </main>
