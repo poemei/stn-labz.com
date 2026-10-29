@@ -109,3 +109,11 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Legacy module allowances are explicitly labeled **NOT mission assignments**. No account, certification, organizational position, mission, or privilege changes were made.
 - Source revision: `a4f8976461b9877ffc103c01cafcef5efc0b9f22`. No deployment or runtime verification performed.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Admin navigation after credential revocation — OPERATOR TEST PENDING
+
+- `admin_access::hasAdminNavigation()` now shows Admin navigation for Tier 9 or where an existing mission/Level 7 transitional allowance actually passes `canAccess()`; a tier/position alone does not show the link.
+- `app/views/inc/classic_nav.php` uses the shared authorization-derived visibility check instead of `tier() > 0`.
+- Certificate revocation on the dummy Tier 1 Support account should therefore hide the Admin link when its last eligible module is removed; active assigned Support should still display it. No changes to server-side module permission policy, certifications, missions or account records.
+- GitHub commits: `453f5b6d81c435361d03e00272574a5d0c6b6faf`, `6504a42b88a4438201cf543d0720d06795e5acac`. Not deployed or runtime tested.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
