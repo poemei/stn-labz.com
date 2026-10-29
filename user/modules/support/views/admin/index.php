@@ -101,7 +101,11 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 <p>Manage support tickets, assignment, support tier, escalation, and lifecycle.</p>
 
                 <?php if ($tickets === []): ?>
-                    <div class="alert alert-secondary">No support tickets have been submitted.</div>
+                    <div class="alert alert-info">
+                        No tickets are available within your currently authorized Support mission scope.
+                        Ticket visibility is determined by the ticket type and your active, matching system mission,
+                        certification, and Support responsibility. An empty list does not mean that no tickets exist.
+                    </div>
                 <?php else: ?>
                     <div class="table-responsive mb-4">
                         <table class="table align-middle">
