@@ -3,7 +3,7 @@ declare(strict_types=1);
 /* [AI:GPT-6 | 2026-10-29 UTC] */
 final class certifications extends controller
 {
-    private const ADMIN_ACTIONS = ['install_sql', 'issue', 'status'];
+    private const ADMIN_ACTIONS = ['install_sql', 'update_sql', 'add_system', 'system_status', 'issue', 'status'];
 
     public function index(array $params = []): void
     {
@@ -42,6 +42,16 @@ final class certifications extends controller
                 http_response_code(409);
                 $this->error_page('Install module SQL first.');
                 return;
+            } elseif ($action === 'update_sql') {
+                $model->updateSchema();
+            } elseif (!$model->systemsReady()) {
+                http_response_code(409);
+                $this->error_page('Update the module SQL to enable the system registry.');
+                return;
+            } elseif ($action === 'add_system') {
+                $model->addSystem((string) ($_POST['system_slug'] ?? ''), (string) ($_POST['display_name'] ?? ''));
+            } elseif ($action === 'system_status') {
+                $model->setSystemActive((string) ($_POST['system_slug'] ?? ''), (string) ($_POST['active'] ?? '') === '1');
             } elseif ($action === 'issue') {
                 $model->issue($_POST, (int) ($_SESSION['user_id'] ?? 0));
             } elseif ($action === 'status') {
@@ -52,6 +62,8 @@ final class certifications extends controller
         }
         $this->view('admin/index', [
             'ready' => $ready,
+            'systems_ready' => $ready && $model->systemsReady(),
+            'systems' => $ready && $model->systemsReady() ? $model->listSystems() : [],
             'accounts' => $ready ? $model->accounts() : [],
             'records' => $ready ? $model->listRecords() : [],
         ]);
