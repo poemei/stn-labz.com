@@ -52,11 +52,11 @@ class admin extends controller
      */
     public function index($params = []): void
     {
-        if (
-            admin_access::tier() < 1
-        ) {
-            header('Location: /auth/login');
-            exit;
+        // Require an actual currently authorized Admin module, not merely
+        // an organizational position. Tier 9 remains explicitly authorized.
+        if (!admin_access::hasAdminNavigation()) {
+            http_response_code(403);
+            $this->error_page('Admin access is not authorized for this account.');
         }
 
         $slug = $params[0] ?? null;
