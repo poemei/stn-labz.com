@@ -85,3 +85,12 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Added Admin **Update Module SQL** for already installed v1.0.0 deployments via `user/modules/certifications/sql/updates/20261029.1_system_registry.sql`; fresh schema installs both tables. Existing certificate records are preserved.
 - Server-side issuance checks the selected registered system is active. No automatic product population, certificate issuance or Mission Control permission bridge.
 - GitHub source committed only; SQL not run in production and PHP/MySQL operator tests pending.
+
+## 2026-10-29 — Certifications Registry to Mission Control Read Bridge — OPERATOR TEST PENDING
+
+- `app/models/organization_model.php` now reads active, issued, non-expired account-linked records from the Certifications module's `certifications_records` table as a supplementary source of **certification** credentials during mission eligibility evaluation.
+- The existing `organization_policy::permits()` still requires an active module/system mission; technical Tier 7 still requires a matching qualification. A certificate is **not** a module permission or qualification.
+- Suspension, revocation, expired or future-issued certificates are not supplied to the policy; if a different independent active certification exists in `organization_credentials`, that record may still independently authorize the same system.
+- Missing Certifications table is treated as no registry certificates. Existing `organization_credentials` and Level 7 transitional allowances are preserved; authorization is **not yet exclusively** based on certification + mission because the legacy fallback remains.
+- Source commit `4f00be5d1fe79f115b8cc053d6091be0773c2b96`. No schema modification, data migration, certificates created, production deployment or PHP/MySQL runtime verification performed.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
