@@ -177,7 +177,7 @@ final class support extends controller
             }
             if ($visible === []) {
                 $accountId = (int) ($_SESSION['user_id'] ?? 0);
-                $tier = admin_access::tier($accountId);
+                $tier = admin_access::supportTier($accountId);
                 $mission = admin_access::mission($accountId, 'support');
                 $routed = false;
                 foreach ($all as $ticket) {
@@ -236,7 +236,7 @@ final class support extends controller
     private static function ticketAccess(array $ticket, string $action): bool
     {
         $accountId = (int) ($_SESSION['user_id'] ?? 0);
-        $tier = admin_access::tier($accountId);
+        $tier = admin_access::supportTier($accountId);
         if (!organization_policy::supportAction($tier, $action)) {
             return false;
         }
