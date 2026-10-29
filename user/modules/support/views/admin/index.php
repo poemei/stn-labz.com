@@ -103,8 +103,8 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 <?php if ($tickets === []): ?>
                     <div class="alert alert-info">
                         No tickets are available within your currently authorized Support mission scope.
-                        Ticket visibility is determined by the ticket type and your active, matching system mission,
-                        certification, and Support responsibility. An empty list does not mean that no tickets exist.
+                        Tickets are visible when your certified Support mission covers their topic or when they are explicitly routed
+                        to your authorized Support tier. An empty list does not mean that no tickets exist.
                     </div>
                 <?php else: ?>
                     <div class="table-responsive mb-4">
