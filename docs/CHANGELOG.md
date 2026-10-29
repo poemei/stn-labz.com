@@ -132,3 +132,9 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Guests see Login and Register links and may continue submitting support tickets without an account.
 - Changed `app/models/accounts_model.php`, `user/modules/support/controllers/support.php`, `user/modules/support/views/index.php`. No database or authorization changes. Runtime verification pending.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Support ticket queue authorization messaging — OPERATOR TEST PENDING
+
+- Corrected the Support Admin empty queue message. Tickets are filtered by the account's current topic-scoped Support read authorization, so an empty visible queue must not claim that no tickets have been submitted.
+- No authorization grants or mission-scope changes were made. Digit's missing Rictus-submitted ticket remains under investigation until the ticket's actual topic and Digit's matching mission scope are verified.
+- Commit `fbefe59d31ba481d7f67d69bd56a9fccc7a3e2a1`. No runtime test performed.
