@@ -43,10 +43,18 @@ $permissions = $data['permissions'] ?? [];
 <form method="post"><?= $this->csrf_field(); ?>
 <input type="hidden" name="action" value="assign">
 <input type="hidden" name="ticket_id" value="<?= $escape($ticket['ticket_id']); ?>">
+<?php
+/* [AI:GPT-6 | 2026-10-29 UTC] Use persisted ticket tier, not the
+ * first dropdown option, as the displayed destination. */
+$assignedTier = (string) ($ticket['tier'] ?? 't1');
+if ($assignedTier === 'dev') { $assignedTier = 't5'; }
+$labels = ['t1'=>'Tier 1 — General Support','t2'=>'Tier 2 — Advanced Support','t3'=>'Tier 3 — Database Support','t4'=>'Tier 4 — Code Support','t5'=>'Tier 5 — Support Manager'];
+?>
+<p class="small mb-2"><strong>Currently assigned:</strong> <?= $escape($labels[$assignedTier] ?? $assignedTier); ?></p>
 <label for="support-destination">Receiving tier</label>
 <select id="support-destination" class="form-select mb-3" name="destination" required>
 <?php foreach ((admin_access::tier() === 1 ? ['t2'=>'Tier 2 — Advanced Support'] : ['t1'=>'Tier 1 — General Support','t2'=>'Tier 2 — Advanced Support','t3'=>'Tier 3 — Database Support','t4'=>'Tier 4 — Code Support','t5'=>'Tier 5 — Support Manager']) as $value=>$label): ?>
-<option value="<?= $escape($value); ?>"><?= $escape($label); ?></option>
+<option value="<?= $escape($value); ?>" <?= $assignedTier === $value ? 'selected' : ''; ?>><?= $escape($label); ?></option>
 <?php endforeach; ?>
 </select><button type="submit" class="btn btn-secondary">Assign to Tier Queue</button></form></div></section>
 <!-- [End AI:GPT-6] -->
