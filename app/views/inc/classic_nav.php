@@ -12,7 +12,7 @@ $siteName = (string) ($SITE['name'] ?? 'Chaos MVC');
         <li><a href="/">Home</a></li>
         <li><a href="/posts">Posts</a></li>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <?php if (admin_access::tier() > 0): ?>
+            <?php if (admin_access::hasAdminNavigation()): ?>
                 <li><a href="/admin">Admin</a></li>
             <?php endif; ?>
             <li>
