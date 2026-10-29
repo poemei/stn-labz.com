@@ -102,3 +102,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Changed `accounts_model::update_admin_access_profile()` ordinary `user` classification mapping to Level 0, preventing the Accounts Admin UI from restoring Level 1 when selecting the user role.
 - Existing account rows were not migrated or modified. No production SQL, deployment or runtime test executed. GitHub commits `7ee5e2e70765ec019e5fa614aa2ec8962a2312dc`, `291b073a977bd40f59f67af659aa9d433f6b0599`.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Accounts Admin Mission Control navigation — OPERATOR TEST PENDING
+
+- Accounts Admin now has a prominent **Open Mission Control Assignments** link and a per-account **Manage position & missions** link, preserving selected account through `account_id` to existing `/accounts/organization` controller.
+- Legacy module allowances are explicitly labeled **NOT mission assignments**. No account, certification, organizational position, mission, or privilege changes were made.
+- Source revision: `a4f8976461b9877ffc103c01cafcef5efc0b9f22`. No deployment or runtime verification performed.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
