@@ -16,7 +16,7 @@
 
       <?php if (isset($_SESSION['user_id'])): ?>
           <?php /* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */ ?>
-          <?php if (admin_access::tier() > 0): ?>
+          <?php if (admin_access::hasAdminNavigation()): ?>
                <a href="/admin" class="btn btn-sm btn-outline-primary">Admin</a>
           <?php endif; ?>
           <?php /* [End AI:GPT-6] */ ?>
