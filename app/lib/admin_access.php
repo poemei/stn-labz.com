@@ -89,6 +89,34 @@ final class admin_access
             && self::mission($accountId, 'support', $system);
     }
 
+    /**
+     * Check a ticket's product-scoped mission, or an explicit routing
+     * destination matching the actor's Organization Support tier.
+     * A destination does not bypass the need for an active certified mission,
+     * and never grants requester correspondence outside Tiers 1 and 2.
+     */
+    public static function supportTicket(array $ticket, string $action, ?int $accountId = null): bool
+    {
+        $accountId ??= (int) ($_SESSION['user_id'] ?? 0);
+        $tier = self::tier($accountId);
+        if (!organization_policy::supportAction($tier, $action)) {
+            return false;
+        }
+        $system = (string) ($ticket['type'] ?? '');
+        if ($system !== '' && self::mission($accountId, 'support', $system)) {
+            return true;
+        }
+        // Ticket destination is independently assigned by the escalation
+        // workflow; unrelated topics are not disclosed outside that queue.
+        if ($tier < 1 || $tier > 5 || $action === 'requester_email') {
+            return false;
+        }
+        $target = 't' . $tier;
+        return (string) ($ticket['tier'] ?? '') === $target
+            && (string) ($ticket['assigned_to'] ?? '') === 'tier:' . $target
+            && self::mission($accountId, 'support');
+    }
+
     /** Navigation visibility is based on current grants, not position alone. */
     public static function hasAdminNavigation(): bool
     {
