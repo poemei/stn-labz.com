@@ -121,6 +121,23 @@ class organization_model extends model
     }
     /* [End AI:GPT-6] */
 
+    public function supportTier(int $id): int
+    {
+        $base = $this->tier($id);
+        if ($base === 9) { return 9; }
+        if (!$this->ready()) { return 0; }
+        $today = gmdate('Y-m-d');
+        $records = $this->records($id);
+        $credentials = array_merge($records['credentials'], $this->certificateCredentials($id, $today));
+        foreach ([5, 4, 3, 2, 1] as $tier) {
+            $system = 'support-t' . $tier;
+            if (organization_policy::permits($tier, $records['missions'], $credentials, 'support', $system, $today)) {
+                return $tier;
+            }
+        }
+        return organization_policy::supportAction($base, 'read') && $this->permits($id, 'support') ? $base : 0;
+    }
+
     public function permits(int $id, string $module, ?string $system = null): bool
     {
         $key = json_encode([$id, $module, $system]);
