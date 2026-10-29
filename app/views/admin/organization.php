@@ -28,6 +28,7 @@ Account level: <?= (int) $trace['account_level']; ?>;
 Organization schema: <?= $escape($trace['schema']); ?>;
 Position tier: <?= $escape($trace['position_tier'] ?? 'MISSING'); ?>;
 Effective tier: <?= (int) $trace['effective_tier']; ?>;
+Support responsibility tier: <?= (int) ($trace['support_tier'] ?? 0); ?>;
 Certified Support mission accepted: <?= $trace['support_permitted'] ? 'YES' : 'NO'; ?></p>
 <h3>Support missions</h3>
 <?php if ($trace['support_missions'] === []): ?><p>NO SUPPORT MISSION RECORDS FOR THIS ACCOUNT ID</p><?php endif; ?>
