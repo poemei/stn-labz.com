@@ -178,6 +178,7 @@ class organization_model extends model
             'schema' => $state,
             'position_tier' => null,
             'effective_tier' => $this->tier($id),
+            'support_tier' => $this->supportTier($id),
             'support_missions' => [],
             'certification_systems' => [],
             'support_permitted' => false,
@@ -207,7 +208,7 @@ class organization_model extends model
                 ];
             }
         }
-        $result['support_permitted'] = $this->permits($id, 'support');
+        $result['support_permitted'] = $this->supportTier($id) > 0;
         return $result;
     }
 
