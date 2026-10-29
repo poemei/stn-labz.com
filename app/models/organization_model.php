@@ -169,7 +169,7 @@ class organization_model extends model
             return $result;
         }
         $position = $this->fetch('SELECT tier FROM organization_positions WHERE account_id = ?', [$id]);
-        $result['position_tier'] = $position === false ? null : (int) $position['tier'];
+        $result['position_tier'] = is_array($position) ? (int) $position['tier'] : null;
         $today = gmdate('Y-m-d');
         $records = $this->records($id);
         foreach ($records['missions'] as $mission) {
