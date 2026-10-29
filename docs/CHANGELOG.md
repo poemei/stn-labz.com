@@ -65,3 +65,9 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Operator PHP run exposed a mistaken negative-test expectation at Tier 6: the pure certification/mission predicate permits an otherwise valid mission for Tier 6 or 8; separate Support action policy forbids those tiers from reading Support tickets.
 - Corrected `tests/mission_policy_denials.php` to assert these independently rather than incorrectly denying the underlying valid credential/mission pair. Commit `ee272e8dcf7a47c206a4a9986964e596115b8493`.
 - No application policy, authorization path, schema, production records or deployment changed. PHP rerun is required; the prior exit code was 255.
+
+## 2026-10-29 — Level 7 Transition Inventory Gate — DOCUMENTATION ONLY
+
+- Added `docs/LEVEL7_TRANSITION.md` to establish a read-only, operator-gated inventory of existing Level 7 module allowances versus live certification, Tier 7 qualification and active missions for Digit and Rictus.
+- Formal mission cutover and removing the temporary Level 7 fallback are **not** authorized by this documentation. Existing working modules remain untouched.
+- Source commit `8fd30e26dddfd195431da78dc06f1067ba0d5bc1`. No application code, records, database schema or deployment changed. Awaiting Operator inventory/approval before permission changes.
