@@ -21,12 +21,25 @@ final class support extends controller
         }
 
         $topics = $model->getTopics(true);
-        $data = ['available' => true, 'error' => null, 'topics' => $topics];
+        // Use the account record rather than trusting names/emails in session.
+        $contact = null;
+        if ((int) ($_SESSION['user_id'] ?? 0) > 0) {
+            $contact = $this->model('accounts_model')->support_contact((int) $_SESSION['user_id']);
+        }
+        $displayName = trim((string) ($contact['display_name'] ?? ''));
+        $accountName = $displayName !== '' ? $displayName : (string) ($contact['username'] ?? '');
+        $accountEmail = trim((string) ($contact['email_address'] ?? ''));
+        $data = [
+            'available' => true, 'error' => null, 'topics' => $topics,
+            'signed_in' => $contact !== null,
+            'name' => $accountName,
+            'email' => $accountEmail,
+        ];
 
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $this->require_csrf();
-            $name = trim((string) ($_POST['name'] ?? ''));
-            $email = trim((string) ($_POST['email'] ?? ''));
+            $name = $contact !== null ? $accountName : trim((string) ($_POST['name'] ?? ''));
+            $email = $contact !== null ? $accountEmail : trim((string) ($_POST['email'] ?? ''));
             $type = strtolower(trim((string) ($_POST['type'] ?? 'general')));
             $subject = trim((string) ($_POST['subject'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
