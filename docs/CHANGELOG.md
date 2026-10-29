@@ -52,3 +52,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Ticket `#10a04e` exposed that the `Assign to Support Tier` dropdown showed its first option (Tier 1) even while the ticket was assigned to Tier 4.
 - The Support ticket view now visibly displays the persisted current support tier and preselects that exact tier in the assignment dropdown, including legacy `dev` -> `t5` presentation. Existing tier permissions and server-side validation are unchanged.
 - Changed only `user/modules/support/views/admin/ticket.php` at `fefbaba9d4734b9aef6145896cd52e6211a1b70a`; no SQL, Core, routing, or deployment change. Live operator verification outstanding.
+
+## 2026-10-29 — Mission Control Negative Authorization Tests — OPERATOR TEST PENDING
+
+- Added `tests/mission_policy_denials.php`, a no-database PHP policy matrix for all Tiers 1–8 plus Level 0 and Tier 9. Cases cover absent, withdrawn, expired and wrong-scope missions; absent, pending, suspended, expired, revoked and wrong-system certifications; and missing/wrong/revoked technical qualifications.
+- The added test exercises `organization_policy::permits()` only. The temporary Level 7 allowance path in `admin_access::canAccess()` is **not** covered or eliminated and may grant access despite invalid mission credentials; real effective authorization is therefore not yet proven to satisfy Certification + Mission Assignment = Access.
+- Existing `tests/organization_access.php` contains obsolete expectations from before the Level 7 restoration and Support notification/routing corrections; it must be reconciled before claiming the complete suite passes.
+- Source commit: `3760338634c74f17879a0ec443825322e39a5df1`. No runtime test execution, application authorization changes, SQL changes or deployment performed. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
