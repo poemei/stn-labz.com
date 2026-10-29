@@ -24,7 +24,8 @@ final class support extends controller
         // Use the account record rather than trusting names/emails in session.
         $contact = null;
         if ((int) ($_SESSION['user_id'] ?? 0) > 0) {
-            $contact = $this->model('accounts_model')->support_contact((int) $_SESSION['user_id']);
+            require_once APPROOT . '/models/accounts_model.php';
+            $contact = (new accounts_model())->support_contact((int) $_SESSION['user_id']);
         }
         $displayName = trim((string) ($contact['display_name'] ?? ''));
         $accountName = $displayName !== '' ? $displayName : (string) ($contact['username'] ?? '');
