@@ -37,3 +37,12 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Existing real transitions continue through the same SQL writes and history events; historic entries remain untouched. Legacy `dev` is normalized to Tier 5 for no-op comparison only.
 - Source revision `1d3f11694ae59e84ccdef21b508be217b66cd493`. No SQL schema update is required, and no database migration, Core change, deployment or historical data cleanup was performed.
 - PHP runtime and Operator UI tests remain outstanding. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Support Requester Lifecycle Email and History Display — OPERATOR TEST PENDING
+
+- Send requester-facing email on **actual status changes** regardless of whether the authorized actor changing status is Tier 1/2 or Tier 9; this is system-generated lifecycle mail, not permission to write manual replies. No notification on unchanged status submissions.
+- Send requester-facing transfer email when tickets change support tier (from either Tier/Escalation or Assignment). Exclude private escalation notes, internal support findings, recipient identities and internal admin links from requester mail. Preserve separate existing internal central Support notices.
+- Render Support event names clearly, e.g. `Internal Note`, as a separate display block from the actor/time metadata.
+- Log email delivery exceptions in PHP error log instead of silently discarding them. Email sending remains best-effort with existing mailer configuration; delivery is not yet verified and message retries/queueing are not implemented.
+- Changed only `user/modules/support/controllers/support.php` (`02fbf495`) and `user/modules/support/views/admin/ticket.php` (`6377b47f`). No SQL schema change, migration, Core change or deployment performed.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
