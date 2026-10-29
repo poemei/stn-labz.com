@@ -198,9 +198,10 @@ final class support extends controller
     }
 
     /**
-     * Compatibility with deployments where Support updates before Core.
-     * Fail closed to the prior topic-scoped authorization until Core's
-     * supportTicket() is deployed. Never permit a ticket on tier alone.
+     * Check the Organization Support tier, an active certified mission,
+     * and either topic scope or an explicit assignment to that tier.
+     * This stays within Support so independently deployed Core versions
+     * cannot silently remove ticket routing visibility.
      */
     private static function ticketAccess(array $ticket, string $action): bool
     {
