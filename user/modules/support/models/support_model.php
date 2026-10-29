@@ -228,6 +228,16 @@ final class support_model extends model
 
     public function setTier(array $ticket, string $tier, string $actor, ?string $note = null): void
     {
+        // [AI:GPT-6 | 2026-10-29 UTC] No transition means no SQL write
+        // or misleading same-tier audit event; preserve prior history.
+        $currentTier = (string) ($ticket['tier'] ?? 't1');
+        if ($currentTier === 'dev') {
+            $currentTier = 't5';
+        }
+        if ($currentTier === $tier) {
+            return;
+        }
+        // [End AI:GPT-6]
         $this->query(
             'UPDATE support_tickets SET tier = :tier WHERE id = :id',
             [':tier' => $tier, ':id' => (int) $ticket['id']]
@@ -253,6 +263,13 @@ final class support_model extends model
 
     public function assignTicket(array $ticket, ?string $assignee, string $actor): void
     {
+        // [AI:GPT-6 | 2026-10-29 UTC] Avoid duplicate assignment
+        // history when a ticket is submitted to its existing destination.
+        $currentAssignee = isset($ticket['assigned_to']) ? (string) $ticket['assigned_to'] : null;
+        if ($currentAssignee === $assignee) {
+            return;
+        }
+        // [End AI:GPT-6]
         $this->query(
             'UPDATE support_tickets SET assigned_to = :assigned_to WHERE id = :id',
             [':assigned_to' => $assignee, ':id' => (int) $ticket['id']]
