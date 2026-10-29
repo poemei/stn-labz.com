@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 final class support extends controller
 {
     private const ADMIN_ACTIONS = [
@@ -78,6 +80,7 @@ final class support extends controller
     public function admin(array $params = []): void
     {
         $this->require_admin(7);
+        $manage = admin_access::tier() === 9;
         /** @var support_model $model */
         $model = $this->model('support_model');
         $state = $model->databaseState();
@@ -88,6 +91,11 @@ final class support extends controller
             if (!in_array($action, self::ADMIN_ACTIONS, true)) {
                 http_response_code(400);
                 $this->error_page('Invalid Support administrative action.');
+            }
+
+            if (in_array($action, ['save_config', 'install_sql', 'delete_data'], true) && !$manage) {
+                http_response_code(403);
+                $this->error_page('Administrator authority is required for Support configuration and lifecycle.');
             }
 
             if ($action === 'save_config') {
@@ -137,7 +145,7 @@ final class support extends controller
         $site = $this->siteIdentity();
         if ($state !== 'ready') {
             $this->view('admin/index', [
-                'database_state' => $state, 'tickets' => [], 'config' => $model->getConfig(),
+                'manage' => $manage, 'database_state' => $state, 'tickets' => [], 'config' => $model->getConfig(),
                 'site_from_name' => $site['name'], 'site_from_email' => $site['email'],
             ]);
             return;
@@ -146,7 +154,8 @@ final class support extends controller
         $ticketId = strtolower(trim((string) ($params[1] ?? '')));
         if ($ticketId === '') {
             $this->view('admin/index', [
-                'database_state' => $state, 'tickets' => $model->getTickets(), 'config' => $model->getConfig(),
+                'manage' => $manage, 'database_state' => $state, 'tickets' => array_values(array_filter($model->getTickets(),
+                    static fn (array $ticket): bool => admin_access::support((string) $ticket['type'], 'read'))), 'config' => $model->getConfig(),
                 'site_from_name' => $site['name'], 'site_from_email' => $site['email'],
             ]);
             return;
@@ -162,10 +171,47 @@ final class support extends controller
             $this->view('admin/ticket', ['database_state'=>$state,'ticket'=>null,'replies'=>[],'events'=>[]]);
             return;
         }
+        $this->requireTicket($ticket, 'read');
+        $permissions = [];
+        foreach (['note', 'requester_email', 'status', 'tier', 'assign'] as $operation) {
+            $permissions[$operation] = admin_access::support((string) $ticket['type'], $operation);
+        }
+        $candidates = [];
+        foreach ((new accounts_model())->get_all() as $account) {
+            $candidateId = (int) $account['id'];
+            $candidateTier = admin_access::tier($candidateId);
+            if ($candidateTier >= 1 && $candidateTier <= 5
+                && admin_access::support((string) $ticket['type'], 'read', $candidateId)) {
+                $candidates[] = ['id' => $candidateId, 'tier' => $candidateTier, 'name' => $account['display_name'] ?: $account['username']];
+            }
+        }
         $this->view('admin/ticket', [
+            'permissions' => $permissions, 'candidates' => $candidates,
             'database_state'=>$state, 'ticket'=>$ticket,
             'replies'=>$model->getReplies((int)$ticket['id']), 'events'=>$model->getEvents((int)$ticket['id']),
         ]);
+    }
+
+    /** Enforce product scope and the actor's assigned responsibility. */
+    private function requireTicket(array $ticket, string $action): void
+    {
+        if (!admin_access::support((string) $ticket['type'], $action)) {
+            http_response_code(403);
+            $this->error_page('This Support operation requires an eligible position and active mission for this system.');
+        }
+    }
+
+    /** Escalation selects a real, currently eligible account, never free text. */
+    private function validatedAssignee(array $ticket, string $tier): string
+    {
+        $id = filter_var($_POST['assigned_to'] ?? null, FILTER_VALIDATE_INT);
+        $targetTier = $tier === 'dev' ? 5 : (int) substr($tier, 1);
+        if (!$id || admin_access::tier($id) !== $targetTier
+            || !admin_access::support((string) $ticket['type'], 'read', $id)) {
+            http_response_code(400);
+            $this->error_page('Select a mission-assigned person with the target support tier and required current credentials.');
+        }
+        return 'account:' . $id;
     }
 
     private function saveConfiguration(support_model $model): void
@@ -212,6 +258,7 @@ final class support extends controller
 
     private function handleTicketAction(support_model $model, array $ticket, string $action): void
     {
+        $this->requireTicket($ticket, $action === 'reply' ? 'note' : $action);
         $actor = $this->adminActor();
         switch ($action) {
             case 'status':
@@ -226,20 +273,25 @@ final class support extends controller
             case 'tier':
                 $tier = strtolower(trim((string) ($_POST['tier'] ?? '')));
                 if ($tier === 'dev') { $tier = 't5'; }
+                if (admin_access::tier() === 1 && $tier !== 't2') {
+                    http_response_code(403);
+                    $this->error_page('General Support escalates to Advanced Support.');
+                }
                 if (!in_array($tier, ['t1','t2','t3','t4','t5'], true)) {
                     http_response_code(400); $this->error_page('Invalid Support tier.');
                 }
                 $note = trim((string) ($_POST['note'] ?? ''));
                 $oldTier = strtolower((string) ($ticket['tier'] ?? 't1'));
                 if ($oldTier === 'dev') { $oldTier = 't5'; }
-                $model->setTier($ticket, $tier, $actor, $note !== '' ? $note : null);
+                $assignee = $this->validatedAssignee($ticket, $tier);
+                $model->escalateTicket($ticket, $tier, $assignee, $actor, $note !== '' ? $note : null);
                 if ($tier !== $oldTier) {
                     $ticket['tier'] = $tier;
                     $this->sendTierNotification($model, $ticket, $actor, $note !== '' ? $note : null);
                 }
                 break;
             case 'assign':
-                $assignee = trim((string) ($_POST['assigned_to'] ?? ''));
+                $assignee = $this->validatedAssignee($ticket, (string) $ticket['tier']);
                 $model->assignTicket($ticket, $assignee !== '' ? $assignee : null, $actor);
                 $ticket['assigned_to'] = $assignee;
                 $this->sendUpdateNotification($model, $ticket, 'Assignment updated');
@@ -248,6 +300,9 @@ final class support extends controller
                 $message = trim((string) ($_POST['message'] ?? ''));
                 if ($message === '') { http_response_code(400); $this->error_page('A Support reply cannot be empty.'); }
                 $isInternal = isset($_POST['is_internal']);
+                if (!$isInternal) {
+                    $this->requireTicket($ticket, 'requester_email');
+                }
                 $model->addReply((int)$ticket['id'], $actor, $message, $isInternal);
                 if (!$isInternal) { $this->sendReplyNotification($model, $ticket, $actor, $message); }
                 break;
@@ -270,6 +325,9 @@ final class support extends controller
 
     private function sendReplyNotification(support_model $model, array $ticket, string $actor, string $message): void
     {
+        if (!admin_access::support((string) $ticket['type'], 'requester_email')) {
+            return;
+        }
         $id=(string)$ticket['ticket_id'];
         $this->sendMail($model,(string)$ticket['email'],(string)$ticket['name'],'[Support #'.$id.'] Support response',
             '<p>Hello '.$this->escapeHtml((string)$ticket['name']).',</p><p>'.$this->escapeHtml($actor).' responded to your Support ticket.</p><p>'.$this->escapeHtml($message).'</p><p><a href="'.URLROOT.'/support/ticket/'.rawurlencode($id).'">View ticket #'.$this->escapeHtml($id).'</a></p>');
@@ -288,6 +346,9 @@ final class support extends controller
 
     private function sendStatusNotification(support_model $model, array $ticket): void
     {
+        if (!admin_access::support((string) $ticket['type'], 'requester_email')) {
+            return;
+        }
         $id=(string)$ticket['ticket_id']; $status=strtoupper(str_replace('_',' ',(string)$ticket['status']));
         $this->sendMail($model,(string)$ticket['email'],(string)$ticket['name'],'[Support #'.$id.'] '.$status,
             '<p>Hello '.$this->escapeHtml((string)$ticket['name']).',</p><p>Your Support ticket <strong>#'.$this->escapeHtml($id).'</strong> is now <strong>'.$this->escapeHtml($status).'</strong>.</p><p><a href="'.URLROOT.'/support/ticket/'.rawurlencode($id).'">View your Support ticket</a></p>');
@@ -295,6 +356,9 @@ final class support extends controller
 
     private function sendUpdateNotification(support_model $model, array $ticket, string $update): void
     {
+        if (!admin_access::support((string) $ticket['type'], 'requester_email')) {
+            return;
+        }
         $id=(string)$ticket['ticket_id'];
         $this->sendMail($model,(string)$ticket['email'],(string)$ticket['name'],'[Support #'.$id.'] '.$update,
             '<p>Hello '.$this->escapeHtml((string)$ticket['name']).',</p><p>'.$this->escapeHtml($update).' for ticket <strong>#'.$this->escapeHtml($id).'</strong>.</p>');
@@ -331,7 +395,7 @@ final class support extends controller
     private function tierLabel(string $tier): string
     {
         $tier=strtolower($tier); if($tier==='dev'){$tier='t5';}
-        return ['t1'=>'Tier 1','t2'=>'Tier 2','t3'=>'Tier 3','t4'=>'Tier 4','t5'=>'Tier 5 — Dev'][$tier]??strtoupper($tier);
+        return ['t1'=>'Tier 1','t2'=>'Tier 2','t3'=>'Tier 3','t4'=>'Tier 4','t5'=>'Tier 5 — Support Manager'][$tier]??strtoupper($tier);
     }
 
     private function escapeHtml(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
@@ -342,3 +406,5 @@ final class support extends controller
         $username=trim((string)($_SESSION['username']??'')); return $username!==''?$username:'Admin';
     }
 }
+
+/* [End AI:GPT-6] */

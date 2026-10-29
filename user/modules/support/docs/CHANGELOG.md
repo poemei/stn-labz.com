@@ -1,5 +1,15 @@
 # Changelog
 
+## STN-LABZ website — 2026-10-28 — Unreleased
+
+- Use Core mission authorization for ticket queues, direct requests and mutations.
+- Restrict requester replies/status/assignment mail to Tier 1 and Tier 2 personnel; keep Tier 3–5 findings internal.
+- Require real, mission-assigned personnel and applicable certification/qualification for escalation; update tier and assignee atomically.
+- Display Tier 5 as Support Manager; preserve legacy records and new-ticket receipts.
+- Reserve configuration and lifecycle actions for existing TSC administration.
+- See the repository organization-access handoff and isolated regression suite; production delivery is not yet verified.
+
+
 ## 1.0.3 — 2026-10-02
 
 ### Added

@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 $SITE = $GLOBALS['SITE'] ?? ($SITE ?? []);
 $siteName = (string) ($SITE['name'] ?? 'Chaos MVC');
 ?>
@@ -10,7 +12,7 @@ $siteName = (string) ($SITE['name'] ?? 'Chaos MVC');
         <li><a href="/">Home</a></li>
         <li><a href="/posts">Posts</a></li>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <?php if ((int) ($_SESSION['user_level'] ?? 0) >= 7): ?>
+            <?php if (admin_access::tier() > 0): ?>
                 <li><a href="/admin">Admin</a></li>
             <?php endif; ?>
             <li>
@@ -25,3 +27,5 @@ $siteName = (string) ($SITE['name'] ?? 'Chaos MVC');
         <?php endif; ?>
     </ul>
 </nav>
+
+/* [End AI:GPT-6] */

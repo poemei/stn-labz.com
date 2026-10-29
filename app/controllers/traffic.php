@@ -39,10 +39,9 @@ class traffic extends controller
      */
     public function admin($params = [])
     {
-        if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] < 7) {
-            header("Location: /auth/login");
-            exit;
-        }
+        /* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+        $this->require_admin(7);
+        /* [End AI:GPT-6] */
 
         $model = $this->model('traffic_model');
         $data['title'] = "Traffic Engine Logs";

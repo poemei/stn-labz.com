@@ -1,4 +1,6 @@
-<?php require APPROOT . '/views/inc/head.php'; ?>
+<?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+ require APPROOT . '/views/inc/head.php'; ?>
 <?php
 $adminModules = is_array($data['admin_modules'] ?? null)
     ? $data['admin_modules']
@@ -11,6 +13,8 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 <div class="container mt-4">
 
 <h2>Account Management</h2>
+<p><a href="/accounts/organization">Positions, certifications, qualifications and mission assignments</a></p>
+<p>Non-administrator access now requires explicit missions and applicable credentials. Existing module allowances are retained for reference and do not grant access on their own.</p>
 <?php if(isset($_SESSION['msg'])): ?>
     <?php $messageType = in_array($_SESSION['msg_type'] ?? '', ['success', 'danger', 'warning', 'info'], true) ? $_SESSION['msg_type'] : 'info'; ?>
     <div class="alert alert-<?= $messageType; ?> mt-3">
@@ -79,7 +83,7 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 
 <?php if (!$isCurrentAccount): ?>
 <details>
-    <summary>Module grants</summary>
+    <summary>Legacy module allowances</summary>
     <?php if ($adminModules === []): ?>
         <p><small>No assignable Admin modules are installed.</small></p>
     <?php endif; ?>
@@ -166,7 +170,7 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 <option value="ai">AI</option>
 <option value="admin">Administrator</option>
 </select>
-<small>Developer and AI accounts receive restricted level 7 authority. Assign their Admin modules after creating the account.</small>
+<small>Developer and AI accounts retain Tier 7 classification. Record their approved credentials and mission assignments in Organization after creating the account.</small>
 </div>
 
 <button type="submit" class="btn btn-primary">Create Account</button>
@@ -176,3 +180,5 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 </div>
 
 <?php require APPROOT . '/views/inc/foot.php'; ?>
+
+<!-- [End AI:GPT-6] -->

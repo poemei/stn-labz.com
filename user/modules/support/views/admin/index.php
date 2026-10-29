@@ -1,4 +1,6 @@
 <?php
+/* [AI:GPT-6 | 2026-10-29 04:17:13 UTC] */
+
 
 /* [AI:GPT-5.6 Sol | 2026-10-05 UTC] */
 
@@ -53,6 +55,7 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 aria-selected="true"
             >Tickets</button>
         </li>
+        <?php if (!empty($data['manage'])): ?>
         <li class="nav-item" role="presentation">
             <button
                 class="nav-link"
@@ -77,6 +80,7 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 aria-selected="false"
             >Lifecycle</button>
         </li>
+        <?php endif; ?>
     </ul>
 
     <div class="tab-content" id="supportAdminTabContent">
@@ -124,7 +128,7 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                                     't2' => 'Tier 2',
                                     't3' => 'Tier 3',
                                     't4' => 'Tier 4',
-                                    't5' => 'Tier 5 — Dev',
+                                    't5' => 'Tier 5 — Support Manager',
                                 ];
                                 ?>
                                 <tr>
@@ -144,6 +148,7 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
             <?php endif; ?>
         </div>
 
+        <?php if (!empty($data['manage'])): ?>
         <div
             class="tab-pane fade"
             id="config-pane"
@@ -329,6 +334,7 @@ $siteFromEmail = (string) ($data['site_from_email'] ?? '');
                 </form>
             </section>
         </div>
+        <?php endif; ?>
     </div>
 </main>
 
@@ -337,3 +343,5 @@ if (!theme::render('foot', get_defined_vars())) {
     require APPROOT . '/views/inc/foot.php';
 }
 /* [End AI:GPT-5.6 Sol] */
+
+/* [End AI:GPT-6] */
