@@ -89,6 +89,47 @@ final class admin_access
             && self::mission($accountId, 'support', $system);
     }
 
+    /** Navigation visibility is based on current grants, not position alone. */
+    public static function hasAdminNavigation(): bool
+    {
+        $id = (int) ($_SESSION['user_id'] ?? 0);
+        if ($id < 1) { return false; }
+        $tier = self::tier($id);
+        if ($tier === 9) { return true; }
+        if ($tier < 1) { return false; }
+
+        try {
+            $modules = [];
+            $organization = self::organization();
+            if ($organization->ready()) {
+                foreach ($organization->records($id)['missions'] as $mission) {
+                    $slug = (string) ($mission['module_slug'] ?? '');
+                    if (self::isAssignable($slug)) { $modules[$slug] = true; }
+                }
+            }
+            if ($tier === 7) {
+                require_once APPROOT . '/models/accounts_model.php';
+                $accounts = new accounts_model();
+                $account = $accounts->get_by_id($id);
+                if (is_array($account)
+                    && in_array((string) ($account['role'] ?? ''), ['developer', 'ai'], true)
+                    && (int) ($account['user_level'] ?? 0) === 7) {
+                    foreach ($accounts->get_admin_modules_for_account($id) as $slug) {
+                        if (is_string($slug) && self::isAssignable($slug)) {
+                            $modules[$slug] = true;
+                        }
+                    }
+                }
+            }
+            foreach (array_keys($modules) as $slug) {
+                if (self::canAccess($id, 0, $slug)) { return true; }
+            }
+        } catch (Throwable $error) {
+            error_log('Admin navigation visibility failed: ' . $error->getMessage());
+        }
+        return false;
+    }
+
     /** @param array<int,string> $modules @return array<int,string> */
     public static function filterForCurrentAccount(array $modules): array
     {
