@@ -78,3 +78,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Tier 9-controlled registration issues unique `certificat-0x-` mixed alphanumeric identifiers linked by `account_id` to existing employee/AI accounts, with system/standard/evidence, issue and expiry dates, issuer and status. Explicit CSRF-checked Install SQL is available in Admin; no SQL auto-installs.
 - This **registry is not a replacement for nor automatically synchronized with** the existing `organization_credentials` authority. It does not change live Mission Control access. Further integration needs separate approval.
 - Module declared version `1.0.0`; source staged, no server-side PHP or MySQL execution verified, no deployment or qualification/acceptance claimed.
+
+## 2026-10-29 — Certifications Module 1.0.1 — System/product dropdown
+
+- Replaced free-form issuance system input with a dropdown backed by module-owned `certifications_systems`, manageable by Tier 9.
+- Added Admin **Update Module SQL** for already installed v1.0.0 deployments via `user/modules/certifications/sql/updates/20261029.1_system_registry.sql`; fresh schema installs both tables. Existing certificate records are preserved.
+- Server-side issuance checks the selected registered system is active. No automatic product population, certificate issuance or Mission Control permission bridge.
+- GitHub source committed only; SQL not run in production and PHP/MySQL operator tests pending.
