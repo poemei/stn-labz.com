@@ -6,9 +6,12 @@ declare(strict_types=1);
 /** Core-owned organization records, with explicit additive SQL installation. */
 class organization_model extends model
 {
+    // PHP-request-local only; never shared across requests or logins.
+    private array $authorizationCache = [];
+
     public function ready(): bool
     {
-        return $this->schemaState() === 'ready';
+        return ($this->authorizationCache['schema'] ??= $this->schemaState()) === 'ready';
     }
 
     private function schemaState(): string
@@ -43,30 +46,33 @@ class organization_model extends model
 
     public function tier(int $id): int
     {
+        if (array_key_exists($id, $this->authorizationCache['tier'] ?? [])) {
+            return $this->authorizationCache['tier'][$id];
+        }
         $account = $this->account($id);
         if ($account === null) {
             return 0;
         }
         if ((int) $account['user_level'] >= 9) {
-            return 9;
+            return $this->authorizationCache['tier'][$id] = 9;
         }
-        $state = $this->schemaState();
+        $state = $this->authorizationCache['schema'] ??= $this->schemaState();
         if ($state === 'partial') {
-            return 0;
+            return $this->authorizationCache['tier'][$id] = 0;
         }
         if ($state === 'ready') {
             $position = $this->fetch('SELECT tier FROM organization_positions WHERE account_id = ?', [$id]);
             if ($position) {
                 $tier = (int) $position['tier'];
-                return $tier >= 1 && $tier <= 8 ? $tier : 0;
+                return $this->authorizationCache['tier'][$id] = ($tier >= 1 && $tier <= 8 ? $tier : 0);
             }
         }
-        return in_array((int) $account['user_level'], [7, 8], true) ? (int) $account['user_level'] : 0;
+        return $this->authorizationCache['tier'][$id] = (in_array((int) $account['user_level'], [7, 8], true) ? (int) $account['user_level'] : 0);
     }
 
     public function records(int $id): array
     {
-        return [
+        return $this->authorizationCache['records'][$id] ??= [
             'position' => $this->fetch('SELECT * FROM organization_positions WHERE account_id = ?', [$id]),
             'credentials' => $this->fetchAll('SELECT * FROM organization_credentials WHERE account_id = ? ORDER BY id', [$id]),
             'missions' => $this->fetchAll('SELECT * FROM organization_missions WHERE account_id = ? ORDER BY id', [$id]),
@@ -82,12 +88,16 @@ class organization_model extends model
      */
     private function certificateCredentials(int $accountId, string $today): array
     {
+        $key = $accountId . ':' . $today;
+        if (isset($this->authorizationCache['certificates'][$key])) {
+            return $this->authorizationCache['certificates'][$key];
+        }
         $exists = $this->fetch(
             'SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1',
             ['certifications_records']
         );
         if (!$exists) {
-            return [];
+            return $this->authorizationCache['certificates'][$key] = [];
         }
         $rows = $this->fetchAll(
             "SELECT system_slug, standard_reference, evidence_reference, expires_on
@@ -107,21 +117,25 @@ class organization_model extends model
                 'qualification_tier' => null,
             ];
         }
-        return $credentials;
+        return $this->authorizationCache['certificates'][$key] = $credentials;
     }
     /* [End AI:GPT-6] */
 
     public function permits(int $id, string $module, ?string $system = null): bool
     {
+        $key = json_encode([$id, $module, $system]);
+        if (array_key_exists($key, $this->authorizationCache['permits'] ?? [])) {
+            return $this->authorizationCache['permits'][$key];
+        }
         $tier = $this->tier($id);
         if ($tier === 9) {
-            return true;
+            return $this->authorizationCache['permits'][$key] = true;
         }
         if ($tier === 0 || !admin_access::isAssignable($module)) {
-            return false;
+            return $this->authorizationCache['permits'][$key] = false;
         }
         if ($module === 'support' && !organization_policy::supportAction($tier, 'read')) {
-            return false;
+            return $this->authorizationCache['permits'][$key] = false;
         }
         if ($this->ready()) {
             $records = $this->records($id);
@@ -133,7 +147,7 @@ class organization_model extends model
         }
         // Retain legacy allowance records, but never use them to bypass an
         // explicit mission or required current credentials.
-        return false;
+        return $this->authorizationCache['permits'][$key] = false;
     }
 
     /** Tier 9 is the existing assignment authority; validate it again on writes. */
