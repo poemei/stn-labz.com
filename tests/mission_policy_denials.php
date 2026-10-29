@@ -47,8 +47,10 @@ $permits = static fn (int $tier, array $missions, array $credentials, ?string $s
 
 foreach (range(1, 8) as $tier) {
     $credentials = [$certificate(), $qualification($tier)];
-    $eligible = !in_array($tier, [6, 8], true);
-    expectPolicy($permits($tier, [$mission()], $credentials), $eligible, "tier {$tier}: valid records and module scope");
+    // Certification + mission eligibility is separate from Support action authority.
+    // Tiers 6 and 8 may hold a valid mission, but cannot read Support tickets.
+    expectPolicy($permits($tier, [$mission()], $credentials), true, "tier {$tier}: valid certification and mission");
+    expectPolicy(organization_policy::supportAction($tier, 'read'), $tier <= 5, "tier {$tier}: Support read responsibility boundary");
     expectPolicy($permits($tier, [], $credentials), false, "tier {$tier}: no mission");
     expectPolicy($permits($tier, [$mission()], []), false, "tier {$tier}: no certification");
     expectPolicy($permits($tier, [$mission()], [$qualification($tier)]), false, "tier {$tier}: qualification alone");
