@@ -73,6 +73,44 @@ class organization_model extends model
         ];
     }
 
+    /**
+     * [AI:GPT-6 | 2026-10-29 UTC]
+     * Read active certificates from the Certifications user module as an
+     * additional credential source. Certificate holder is the account ID;
+     * expiry is checked at the time of each authorization evaluation.
+     * A certificate alone cannot authorize a module without a mission.
+     */
+    private function certificateCredentials(int $accountId, string $today): array
+    {
+        $exists = $this->fetch(
+            'SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1',
+            ['certifications_records']
+        );
+        if (!$exists) {
+            return [];
+        }
+        $rows = $this->fetchAll(
+            "SELECT system_slug, standard_reference, evidence_reference, expires_on
+             FROM certifications_records
+             WHERE account_id = ? AND status = 'active'
+               AND issued_on <= ?
+               AND (expires_on IS NULL OR expires_on >= ?)",
+            [$accountId, $today, $today]
+        );
+        $credentials = [];
+        foreach (is_array($rows) ? $rows : [] as $row) {
+            $credentials[] = [
+                'kind' => 'certification',
+                'system_slug' => $row['system_slug'],
+                'status' => 'active',
+                'expires_on' => $row['expires_on'],
+                'qualification_tier' => null,
+            ];
+        }
+        return $credentials;
+    }
+    /* [End AI:GPT-6] */
+
     public function permits(int $id, string $module, ?string $system = null): bool
     {
         $tier = $this->tier($id);
@@ -87,7 +125,9 @@ class organization_model extends model
         }
         if ($this->ready()) {
             $records = $this->records($id);
-            if (organization_policy::permits($tier, $records['missions'], $records['credentials'], $module, $system, gmdate('Y-m-d'))) {
+            $today = gmdate('Y-m-d');
+            $credentials = array_merge($records['credentials'], $this->certificateCredentials($id, $today));
+            if (organization_policy::permits($tier, $records['missions'], $credentials, $module, $system, $today)) {
                 return true;
             }
         }
