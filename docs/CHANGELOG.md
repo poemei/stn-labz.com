@@ -15,3 +15,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Defined employee/AI login evaluation, Level 0 public fallback, mission-based Admin module loading, and server-side enforcement.
 - Clarified tier/agent work destinations (example: **Tier 2 — Digit**) rather than mandatory individual employee assignment; documented notifications, case acceptance, escalation and requester communication boundaries.
 - Identified implementation mismatches and unknown decisions without approving fixes. Documentation change only; no application code, database, version or deployment change. Pending Operator review.
+
+## 2026-10-29 — Level 7 Developer/AI access compatibility fix — OPERATOR TEST PENDING
+
+- Ticket `#10a04e`: Rictus reported successful `/admin` login with no displayed modules. Restored the existing per-account `account_module_access` fallback for accounts whose current persisted role is `developer` or `ai` and whose effective/current level is 7, only for assignable modules, in `app/lib/admin_access.php`.
+- Current mission authorization remains preferred. This is a transitional continuity exception pending the Operator's certification-plus-mission adoption design; it is **not** a declaration that the final authorization model is implemented.
+- Source revision: `a70372bdce4e7617763ad8e98a0d82c84f2d22f6`. No database, account records, production deployment, module source or Support escalation changed.
+- Repository-source verification only; no production session, PHP runtime regression suite or Operator client acceptance recorded. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE** before the separate Support escalation repair.
