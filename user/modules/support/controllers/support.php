@@ -167,9 +167,39 @@ final class support extends controller
 
         $ticketId = strtolower(trim((string) ($params[1] ?? '')));
         if ($ticketId === '') {
+            $visible = [];
+            $diagnostic = null;
+            $all = $model->getTickets();
+            foreach ($all as $ticket) {
+                if (self::ticketAccess($ticket, 'read')) {
+                    $visible[] = $ticket;
+                }
+            }
+            if ($visible === []) {
+                $accountId = (int) ($_SESSION['user_id'] ?? 0);
+                $tier = admin_access::tier($accountId);
+                $mission = admin_access::mission($accountId, 'support');
+                $routed = false;
+                foreach ($all as $ticket) {
+                    if ((string) ($ticket['tier'] ?? '') === 't5'
+                        && (string) ($ticket['assigned_to'] ?? '') === 'tier:t5') {
+                        $routed = true;
+                        break;
+                    }
+                }
+                // Only the actor's own eligibility and a boolean queue
+                // presence are exposed; no inaccessible ticket details.
+                $diagnostic = [
+                    'revision' => 'support-queue-20261029-b',
+                    'tier' => $tier,
+                    'mission' => $mission,
+                    'tier5_present' => $tier === 5 ? $routed : null,
+                ];
+            }
             $this->view('admin/index', [
-                'manage' => $manage, 'database_state' => $state, 'tickets' => array_values(array_filter($model->getTickets(),
-                    static fn (array $ticket): bool => self::ticketAccess($ticket, 'read'))), 'config' => $model->getConfig(),
+                'manage' => $manage, 'database_state' => $state,
+                'tickets' => $visible, 'queue_diagnostic' => $diagnostic,
+                'config' => $model->getConfig(),
                 'site_from_name' => $site['name'], 'site_from_email' => $site['email'],
             ]);
             return;
