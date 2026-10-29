@@ -238,6 +238,7 @@ class accounts extends controller
             'accounts' => $this->model('accounts_model')->get_all(),
             'modules' => $modules, 'tiers' => organization_policy::TIERS,
             'records' => $ready && $id > 0 ? $model->records($id) : [],
+            'authority_trace' => $id > 0 ? $model->inspectSupportAuthority($id) : null,
         ]);
     }
 
