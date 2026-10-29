@@ -134,7 +134,25 @@ class accounts extends controller
         }
         $model = $this->model('accounts_model');
 
-        $model->delete((int)$id);
+        try {
+            $deleted = $model->delete((int) $id);
+            $_SESSION['msg'] = $deleted
+                ? 'Account deleted successfully.'
+                : 'Account could not be deleted.';
+            $_SESSION['msg_type'] = $deleted ? 'success' : 'danger';
+        } catch (PDOException $error) {
+            // Certification holder/issuer foreign keys deliberately preserve
+            // certificate history. Do not remove those records implicitly.
+            if ($error->getCode() === '23000') {
+                $_SESSION['msg'] = 'Account deletion blocked by related records (including certifications). '
+                    . 'No records were deleted. Resolve retention and certificate ownership before deleting this account.';
+                $_SESSION['msg_type'] = 'warning';
+            } else {
+                error_log('Account deletion failed: ' . $error->getMessage());
+                $_SESSION['msg'] = 'Account deletion failed. See the server error log.';
+                $_SESSION['msg_type'] = 'danger';
+            }
+        }
 
         header('Location: ' . URLROOT . '/admin/accounts');
         exit;
