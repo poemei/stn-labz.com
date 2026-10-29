@@ -1,0 +1,22 @@
+{
+  "module": "certifications",
+  "name": "STN-Labz Certifications",
+  "version": "1.0.0",
+  "creator": "STN-Labz",
+  "description": "Account-linked certification registry for human employees and AI agents; no implicit access grants.",
+  "database_tables": [
+    "certifications_records"
+  ],
+  "files": [
+    "controllers/certifications.php",
+    "models/certifications_model.php",
+    "views/index.php",
+    "views/admin/index.php",
+    "sql/schema.sql",
+    "docs/README.md",
+    "docs/CHANGELOG.md"
+  ],
+  "routes": [
+    "index"
+  ]
+}
