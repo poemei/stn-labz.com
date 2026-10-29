@@ -13,7 +13,7 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 <div class="container mt-4">
 
 <h2>Account Management</h2>
-<p><a href="/accounts/organization">Positions, certifications, qualifications and mission assignments</a></p>
+<div class="alert alert-info"><strong>Mission Control assignments:</strong> Positions and mission assignments are managed separately from Account classification. <a class="btn btn-primary btn-sm" href="<?= htmlspecialchars(URLROOT, ENT_QUOTES, 'UTF-8'); ?>/accounts/organization">Open Mission Control Assignments</a></div>
 <p>Non-administrator access now requires explicit missions and applicable credentials. Existing module allowances are retained for reference and do not grant access on their own.</p>
 <?php if(isset($_SESSION['msg'])): ?>
     <?php $messageType = in_array($_SESSION['msg_type'] ?? '', ['success', 'danger', 'warning', 'info'], true) ? $_SESSION['msg_type'] : 'info'; ?>
@@ -29,7 +29,8 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 <th>Username</th>
 <th>Name</th>
 <th>Email</th>
-<th>Classification and Admin Access</th>
+<th>Classification and Legacy Module Allowances</th>
+<th>Mission Control</th>
 <th>Password</th>
 <th>Delete</th>
 </tr>
@@ -83,7 +84,7 @@ $moduleAccess = is_array($data['module_access'] ?? null)
 
 <?php if (!$isCurrentAccount): ?>
 <details>
-    <summary>Legacy module allowances</summary>
+    <summary>Legacy module allowances (NOT mission assignments)</summary>
     <?php if ($adminModules === []): ?>
         <p><small>No assignable Admin modules are installed.</small></p>
     <?php endif; ?>
@@ -99,9 +100,14 @@ $moduleAccess = is_array($data['module_access'] ?? null)
         </label>
     <?php endforeach; ?>
 </details>
-<button type="submit">save access</button>
+<button type="submit">Save account classification / legacy allowances</button>
 <?php endif; ?>
 </form>
+</td>
+
+<td>
+<a class="btn btn-outline-primary btn-sm" href="<?= htmlspecialchars(URLROOT, ENT_QUOTES, 'UTF-8'); ?>/accounts/organization?account_id=<?= (int) $a['id']; ?>">Manage position &amp; missions</a>
+<p><small>Use Organization to assign a tier and missions. Legacy module allowances do not create missions.</small></p>
 </td>
 
 <td>
