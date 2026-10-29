@@ -20,6 +20,9 @@ $escape = static fn ($value): string => htmlspecialchars(
 
 $available = (bool) ($data['available'] ?? false);
 $topics = is_array($data['topics'] ?? null) ? $data['topics'] : [];
+$signedIn = !empty($data['signed_in']);
+$name = (string) ($data['name'] ?? '');
+$email = (string) ($data['email'] ?? '');
 ?>
 
 <main class="container py-5">
@@ -31,9 +34,16 @@ $topics = is_array($data['topics'] ?? null) ? $data['topics'] : [];
                 Support is currently unavailable.
             </div>
         <?php else: ?>
-            <p>
-                Need help? Open a support ticket below.
-            </p>
+            <p>Need help? Open a support ticket below.</p>
+            <?php if (!$signedIn): ?>
+                <div class="alert alert-info">
+                    Have an account? <a href="/login">Log in</a> to use your saved contact information,
+                    or <a href="/register">register</a> for an account.
+                    You can also submit a ticket as a guest.
+                </div>
+            <?php else: ?>
+                <p class="text-muted">Your name and email are filled from your account.</p>
+            <?php endif; ?>
 
             <?php if (($data['error'] ?? null) !== null): ?>
                 <div class="alert alert-danger">
@@ -57,6 +67,8 @@ $topics = is_array($data['topics'] ?? null) ? $data['topics'] : [];
                             type="text"
                             name="name"
                             maxlength="150"
+                            value="<?= $escape($name); ?>"
+                            <?= $signedIn ? 'readonly' : ''; ?>
                             required
                         >
                     </div>
@@ -69,6 +81,8 @@ $topics = is_array($data['topics'] ?? null) ? $data['topics'] : [];
                             type="email"
                             name="email"
                             maxlength="255"
+                            value="<?= $escape($email); ?>"
+                            <?= $signedIn ? 'readonly' : ''; ?>
                             required
                         >
                     </div>
