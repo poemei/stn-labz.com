@@ -41,3 +41,18 @@ Bring working Level 7 module access under the definitive rule **Certification + 
 - Any proposed automated conversion that equates legacy module assignment with certification.
 
 **No database mutations, migration, access revocation or code cutover are authorized by this document.**
+
+## 2026-10-29 — Tier 1 controlled authorization baseline (operator reported)
+
+- Fresh ordinary account created at persisted Level 0.
+- Certificate-only test: no Admin access.
+- Active matching `mission-control` certificate, Tier 1 General Support position and `support / mission-control` mission allowed Support Admin to appear and open.
+- Revocation of the only reported matching certificate removed Support module access.
+- The active theme's Admin navigation was corrected to use current authorized modules; operator confirmed the link disappeared.
+- Direct `/admin` was corrected to deny accounts with no qualifying module permission; operator confirmed HTTP 403.
+- Organization mission record `support / mission-control`, reference `MC-SUPPORT-TEST-001`, showed `Active: No`, changed by Account 1 on 2026-10-29 17:47:22. Operator identified this as the already-performed mission-withdrawal test. No additional withdrawal test should be requested without a distinct purpose.
+- These results concern one dummy Tier 1 account and specific routes. They do **not** establish Level 7 Digit/Rictus migration readiness, full route coverage, credential uniqueness, or absence of fallback paths.
+
+## Next controlled stage — Level 7 read-only account inventory
+
+Before changing any Level 7 authorization, inventory each real agent's currently working modules and examine its corresponding organization position, active certification records from both the module registry and organization credentials, tier-specific qualifications, and module/system missions. Mark each module **mission-authorized**, **legacy-only**, or **unauthorized**, and compare observed runtime permissions. Do not create, copy, revoke or infer agent credentials from existing allowances. The temporary Level 7 fallback remains in place pending explicit migration authorization and acceptance.
