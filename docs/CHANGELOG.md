@@ -22,3 +22,11 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Current mission authorization remains preferred. This is a transitional continuity exception pending the Operator's certification-plus-mission adoption design; it is **not** a declaration that the final authorization model is implemented.
 - Source revision: `a70372bdce4e7617763ad8e98a0d82c84f2d22f6`. No database, account records, production deployment, module source or Support escalation changed.
 - Repository-source verification only; no production session, PHP runtime regression suite or Operator client acceptance recorded. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE** before the separate Support escalation repair.
+
+## 2026-10-29 — Support Tier Queue Escalation Fix — OPERATOR TEST PENDING
+
+- Removed the forced individual employee selection from Support ticket escalation and reassignment; receiving destinations are now stored as `tier:t1` through `tier:t5` in the existing `assigned_to` field. No schema change or records migrated.
+- The existing Support model's transactional `escalateTicket()` retains tier and assignment events, and the existing centralized tier-change notification remains invoked. This change does **not** implement per-recipient tier notification delivery, on-duty tracking, AI-agent acceptance, or account-to-agent mapping; those remain roadmap work.
+- Tier 1 users are constrained to Tier 2 escalation in both controller validation and displayed selections. Other existing action and requester-email authorization boundaries are retained.
+- Scope: `user/modules/support/controllers/support.php` and `user/modules/support/views/admin/ticket.php`; revisions `6b7ea25`, `a406c5d`, `8b97967`. No Core, accounts, database, or deployment changes.
+- Source checks only; PHP runtime, mail delivery and end-to-end operator tests are outstanding. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
