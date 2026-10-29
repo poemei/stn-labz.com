@@ -30,6 +30,17 @@ class accounts_model extends model
         return false;
     }
 
+    /** Registered contact details for a signed-in Support requester. */
+    public function support_contact(int $accountId): ?array
+    {
+        if ($accountId < 1) { return null; }
+        $row = $this->fetch(
+            'SELECT username, display_name, email_address FROM accounts WHERE id = ? LIMIT 1',
+            [$accountId]
+        );
+        return is_array($row) ? $row : null;
+    }
+
     /**
      * Retrieve all accounts
      *
