@@ -117,3 +117,11 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Certificate revocation on the dummy Tier 1 Support account should therefore hide the Admin link when its last eligible module is removed; active assigned Support should still display it. No changes to server-side module permission policy, certifications, missions or account records.
 - GitHub commits: `453f5b6d81c435361d03e00272574a5d0c6b6faf`, `6504a42b88a4438201cf543d0720d06795e5acac`. Not deployed or runtime tested.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Mission Control request-local authorization caching — OPERATOR TEST PENDING
+
+- `app/models/organization_model.php` reuses schema state, organizational tier, missions/credentials, active registry certificates, and permission decisions within a single PHP request. Repeated Support ticket-topic checks no longer re-query the same account authorization data every time.
+- No cross-request, shared, or persistent caching introduced; revocation and mission changes should be picked up on the next HTTP request. Legacy Level 7 rules unchanged.
+- No live timing, query counts, PHP runtime validation, or deployment measured; latency improvement is a hypothesis pending operator measurement.
+- Commit `e454947b4c19227cb741de0080e8792219a372d3`.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
