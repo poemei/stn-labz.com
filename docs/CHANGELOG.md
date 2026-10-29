@@ -125,3 +125,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - No live timing, query counts, PHP runtime validation, or deployment measured; latency improvement is a hypothesis pending operator measurement.
 - Commit `e454947b4c19227cb741de0080e8792219a372d3`.
 - **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Support requester account contact autofill — OPERATOR TEST PENDING
+
+- Support public submission loads registered name (display name or username fallback) and email from the authenticated account record, rather than trusting browser inputs or session contact claims. These fields are prefilled read-only in the view and account-backed again on POST.
+- Guests see Login and Register links and may continue submitting support tickets without an account.
+- Changed `app/models/accounts_model.php`, `user/modules/support/controllers/support.php`, `user/modules/support/views/index.php`. No database or authorization changes. Runtime verification pending.
+- **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
