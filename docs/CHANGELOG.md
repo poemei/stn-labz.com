@@ -59,3 +59,9 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - The added test exercises `organization_policy::permits()` only. The temporary Level 7 allowance path in `admin_access::canAccess()` is **not** covered or eliminated and may grant access despite invalid mission credentials; real effective authorization is therefore not yet proven to satisfy Certification + Mission Assignment = Access.
 - Existing `tests/organization_access.php` contains obsolete expectations from before the Level 7 restoration and Support notification/routing corrections; it must be reconciled before claiming the complete suite passes.
 - Source commit: `3760338634c74f17879a0ec443825322e39a5df1`. No runtime test execution, application authorization changes, SQL changes or deployment performed. **AWAITING OPERATOR END-TO-END TESTING AND ACCEPTANCE**.
+
+## 2026-10-29 — Mission Policy Test Expectation Correction — RERUN REQUIRED
+
+- Operator PHP run exposed a mistaken negative-test expectation at Tier 6: the pure certification/mission predicate permits an otherwise valid mission for Tier 6 or 8; separate Support action policy forbids those tiers from reading Support tickets.
+- Corrected `tests/mission_policy_denials.php` to assert these independently rather than incorrectly denying the underlying valid credential/mission pair. Commit `ee272e8dcf7a47c206a4a9986964e596115b8493`.
+- No application policy, authorization path, schema, production records or deployment changed. PHP rerun is required; the prior exit code was 255.
