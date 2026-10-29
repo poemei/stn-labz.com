@@ -169,7 +169,7 @@ final class support extends controller
         if ($ticketId === '') {
             $this->view('admin/index', [
                 'manage' => $manage, 'database_state' => $state, 'tickets' => array_values(array_filter($model->getTickets(),
-                    static fn (array $ticket): bool => admin_access::supportTicket($ticket, 'read'))), 'config' => $model->getConfig(),
+                    static fn (array $ticket): bool => self::ticketAccess($ticket, 'read'))), 'config' => $model->getConfig(),
                 'site_from_name' => $site['name'], 'site_from_email' => $site['email'],
             ]);
             return;
@@ -188,7 +188,7 @@ final class support extends controller
         $this->requireTicket($ticket, 'read');
         $permissions = [];
         foreach (['note', 'requester_email', 'status', 'tier', 'assign'] as $operation) {
-            $permissions[$operation] = admin_access::supportTicket($ticket, $operation);
+            $permissions[$operation] = self::ticketAccess($ticket, $operation);
         }
         $this->view('admin/ticket', [
             'permissions' => $permissions,
@@ -197,10 +197,23 @@ final class support extends controller
         ]);
     }
 
+    /**
+     * Compatibility with deployments where Support updates before Core.
+     * Fail closed to the prior topic-scoped authorization until Core's
+     * supportTicket() is deployed. Never permit a ticket on tier alone.
+     */
+    private static function ticketAccess(array $ticket, string $action): bool
+    {
+        if (method_exists(admin_access::class, 'supportTicket')) {
+            return admin_access::supportTicket($ticket, $action);
+        }
+        return admin_access::support((string) ($ticket['type'] ?? ''), $action);
+    }
+
     /** Enforce product scope and the actor's assigned responsibility. */
     private function requireTicket(array $ticket, string $action): void
     {
-        if (!admin_access::supportTicket($ticket, $action)) {
+        if (!self::ticketAccess($ticket, $action)) {
             http_response_code(403);
             $this->error_page('This Support operation requires an eligible position and active mission for this system.');
         }
