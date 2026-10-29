@@ -71,3 +71,10 @@ This is the source-change record for stn-labz.com. Dates are source dates, not d
 - Added `docs/LEVEL7_TRANSITION.md` to establish a read-only, operator-gated inventory of existing Level 7 module allowances versus live certification, Tier 7 qualification and active missions for Digit and Rictus.
 - Formal mission cutover and removing the temporary Level 7 fallback are **not** authorized by this documentation. Existing working modules remain untouched.
 - Source commit `8fd30e26dddfd195431da78dc06f1067ba0d5bc1`. No application code, records, database schema or deployment changed. Awaiting Operator inventory/approval before permission changes.
+
+## 2026-10-29 — Certifications Registry Module v1.0.0 — OPERATOR TEST PENDING
+
+- Added `user/modules/certifications/` as a separate user module from the existing public `certification` module, with controller, model, views, module manifest, module-owned `sql/schema.sql`, and module documentation.
+- Tier 9-controlled registration issues unique `certificat-0x-` mixed alphanumeric identifiers linked by `account_id` to existing employee/AI accounts, with system/standard/evidence, issue and expiry dates, issuer and status. Explicit CSRF-checked Install SQL is available in Admin; no SQL auto-installs.
+- This **registry is not a replacement for nor automatically synchronized with** the existing `organization_credentials` authority. It does not change live Mission Control access. Further integration needs separate approval.
+- Module declared version `1.0.0`; source staged, no server-side PHP or MySQL execution verified, no deployment or qualification/acceptance claimed.
