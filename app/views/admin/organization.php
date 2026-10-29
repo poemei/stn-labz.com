@@ -19,6 +19,28 @@ $records = $data['records'];
 <?php foreach ($data['accounts'] as $account): ?><option value="<?= (int) $account['id']; ?>" <?= $id === (int) $account['id'] ? 'selected' : ''; ?>><?= $escape($account['display_name'] . ' (' . $account['username'] . ')'); ?></option><?php endforeach; ?>
 </select></label> <button>Inspect</button></form>
 <?php if ($id > 0): ?>
+<?php if (is_array($data['authority_trace'] ?? null)): ?>
+<?php $trace = $data['authority_trace']; ?>
+<section class="card p-3 mb-4">
+<h2>Support authority trace (read-only)</h2>
+<p>Account found: <?= $trace['account_found'] ? 'YES' : 'NO'; ?>;
+Account level: <?= (int) $trace['account_level']; ?>;
+Organization schema: <?= $escape($trace['schema']); ?>;
+Position tier: <?= $escape($trace['position_tier'] ?? 'MISSING'); ?>;
+Effective tier: <?= (int) $trace['effective_tier']; ?>;
+Certified Support mission accepted: <?= $trace['support_permitted'] ? 'YES' : 'NO'; ?></p>
+<h3>Support missions</h3>
+<?php if ($trace['support_missions'] === []): ?><p>NO SUPPORT MISSION RECORDS FOR THIS ACCOUNT ID</p><?php endif; ?>
+<?php foreach ($trace['support_missions'] as $m): ?>
+<p>System <?= $escape($m['system']); ?>; active <?= $m['active'] ? 'YES' : 'NO'; ?>; expires <?= $escape($m['expires_on'] ?? 'None'); ?></p>
+<?php endforeach; ?>
+<h3>Certifications</h3>
+<?php if ($trace['certification_systems'] === []): ?><p>NO CERTIFICATION RECORDS FOR THIS ACCOUNT ID</p><?php endif; ?>
+<?php foreach ($trace['certification_systems'] as $c): ?>
+<p>System <?= $escape($c['system']); ?>; status <?= $escape($c['status']); ?>; expires <?= $escape($c['expires_on'] ?? 'None'); ?></p>
+<?php endforeach; ?>
+</section>
+<?php endif; ?>
 <h2>Position</h2>
 <p>Current record: <?= $escape($records['position']['position_name'] ?? 'No explicit position'); ?> — <?= $escape($data['tiers'][$records['position']['tier'] ?? 0] ?? 'Existing account classification applies'); ?></p>
 <p>Tier 9 remains controlled by the existing Administrator account classification. All other staff require explicit missions and applicable credentials; legacy module allowances remain stored for reference.</p>
