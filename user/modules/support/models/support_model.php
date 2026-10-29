@@ -161,7 +161,8 @@ final class support_model extends model
     public function getTickets(): array
     {
         $tickets = $this->fetchAll(
-            "SELECT * FROM support_tickets
+            "SELECT ticket_id, type, subject, status, tier, assigned_to, created_at
+             FROM support_tickets
              ORDER BY CASE status
                 WHEN 'open' THEN 1
                 WHEN 'in_progress' THEN 2
